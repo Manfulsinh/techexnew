@@ -37,11 +37,21 @@ border-radius: 3px;
 /*  first pages and */
 
 
-button#post-button {
+/* button#post-button {
 
   width: 40%;
-}
+} */
 
+
+button.btn.btn-secondary {
+  width: 60%;
+  margin: 7px;
+  padding: 12px;
+  text-align: center;
+  background-color: #007bff;
+  border-radius: 10px;
+  font-size: 15px;
+}
 
 
 .post-btn {

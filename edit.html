@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="/js/edit.css.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <script src="https://apis.google.com/js/api:client.js"></script>
+</head>
+<body>
+    
+
+<nav class="navbar">
+    <ul class="navbar-nav mr-auto">
+       <li class="nav-item">
+        <a class="nav-link" href="#">Edit Post
+        </a>
+      </li>
+     
+    </ul>
+    <i class="fa-solid fa-xmark" id="xmark-icon"></i>
+
+
+    
+  </nav>
+  
+ 
+  <div class="page">
+    <textarea id="edit-tex" placeholder="" ></textarea>
+    
+      
+    </div>
+    
+
+ <div class="container">
+        <div class="edit">
+      <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+    
+      <div class="col-sm-6 col-6">
+          <img src="./img/3.jpg" class="im-2" id="preview-image">
+             </div>
+    <div class="col-sm-3 col-3">
+       <h6 class="media" id="preview-title">Media 1</h6>
+        </div>
+          
+
+    <div class="col-sm-3 col-3">
+        <i class="fa-solid fa-xmark icon" id="reset-icon" style="margin-top: 51px;"></i>
+      </div>
+</div>
+  </div>
+</div>
+</div>
+    </div>
+
+
+     <div class="card-4">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6 mk-1">
+              <div class="card-5">
+                <div class="card-body">
+                  <label for="post-image" id="image-label">
+                    <i class="fa-solid fa-image" id="image-icon"></i>
+                    <div class="d-flex justify-content-center align-items-center mt-2">
+                      <span>Photo/Video</span>
+                    </div>
+                  </label>
+                  <input type="file" id="post-image" accept="image/*, video/*" style="display: none">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 mk-1">
+              <div class="card-5">
+                 <div class="card-body">
+                  <label for="post">
+                     <i class="fa-solid fa-camera" id="camera-icon"></i>
+                    <div class="d-flex justify-content-center align-items-center mt-2">
+                      <span>Camera</span>
+                    </div>
+                  </label>
+                 <input type="file" id="post-camera" accept="image/*, video/*" style="display: none"> 
+                </div>  
+
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+                  <div class="delete">
+                    <div class="row">
+                    <div class="col-sm-6">
+                      <button type="button" class="btn btn-dange-3">Delete</button>
+                    </div>
+                    <div class="col-sm-6">
+                   
+                      <button type="button" class="btn btn-primary-3" id="updateButton">Update</button>
+
+                    </div>
+                  </div>
+                  </div>
+                  
+                  
+                
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+ const xmarkIcon = document.getElementById("xmark-icon");
+  xmarkIcon.addEventListener("click", () => {
+
+    window.history.back();
+  });
+
+</script>  
+<script>
+  
+  const imageIcon = document.getElementById('image-icon');
+  const postImageInput = document.getElementById('post-image');
+  const previewImage = document.getElementById('preview-image');
+
+ 
+  imageIcon.addEventListener('click', () => {
+
+    postImageInput.click();
+  });
+
+
+  postImageInput.addEventListener('change', () => {
+    const file = postImageInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+ 
+      reader.onload = () => {
+        previewImage.src = reader.result;
+        localStorage.setItem('selectedImage', reader.result);
+
+      };
+
+
+      reader.readAsDataURL(file);
+    }
+  });
+</script>  
+ 
+ <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var myDiv = document.getElementById("myDiv");
+    var textAreaDiv = document.getElementById("textAreaDiv");
+ 
+  });
+
+
+
+
+// When the page loads, we populate the fields with the post data
+document.addEventListener('DOMContentLoaded', function() {
+  const postToEdit = JSON.parse(localStorage.getItem('postToEdit'));
+  if (postToEdit) {
+    document.getElementById('edit-text').value = postToEdit.text; // Set the text
+    document.getElementById('preview-image').src = postToEdit.image; // Set the image
+  }
+});
+document.getElementById('updateButton').addEventListener('click', () => {
+  const updatedText = document.getElementById('edit-text').value;
+  const updatedImage = localStorage.getItem('selectedImage'); // You set this when the image is updated
+  // Now, update the post in your local storage or server
+  // For local storage, it would look something like this:
+  const posts = JSON.parse(localStorage.getItem('posts')) || [];
+  const postIndex = posts.findIndex(post => post.id === postToEdit.id);
+  if (postIndex > -1) {
+    posts[postIndex].text = updatedText;
+    posts[postIndex].image = updatedImage;
+    localStorage.setItem('posts', JSON.stringify(posts));
+  }
+  window.location.href = '/chat.html'; // Navigate back to chat page
+});
+
+
+
+  </script>     
+  
+
+
+      </body>
+      </html>
+   
+      
+      
+      
+      
+      

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +22,14 @@
   <style>
 
 
+.popover-content {
+  display: none;
+  /* rest of your styles for popover content */
+}
+
+.popover-content.show {
+  display: block;
+}
 
 
 
@@ -71,7 +80,7 @@
     
 </div>
 <div id="popoverContent" class="popover-content">
-  <a href="./edit.html"><button class="popover-action-btn">Edit Post</button></a>
+  <a href="/chat.html"><button class="popover-action-btn">Edit Post</button></a>
   <button class="popover-action-btn">Delete Post</button>
 </div>
 
@@ -86,14 +95,14 @@
     <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
     <i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>
   </div> </div>  
-    </div>
+    </div> 
 </div> 
 
 <div class="mobilebar-container mobile-layout">
     <nav class="mobilebar-tab">
         <div id="applicationBarMobileButton1" class="mobilebar-tab-item active">
             <span class="mobilebar-tab__icon">
-                <a href="/chat.html"> <i class="fa-solid fa-house"></i></a>
+                <a href="/edit.html"> <i class="fa-solid fa-house"></i></a>
             </span>
         </div>
         <div class="mobilebar-tab-item">
@@ -120,7 +129,7 @@
 
 
 
-
+<!-- 
 <script>
 
 function renderPost(post) {
@@ -157,19 +166,7 @@ function renderPost(post) {
   function loadPosts() {
     const postsContainer = document.getElementById('post-container');
     const posts = JSON.parse(localStorage.getItem('posts')) || [];
-    const icons = document.querySelectorAll('.popoverIcon');
-
-    function togglePopover(event) {
-  
-  const popoverContent = event.currentTarget.closest('.card').querySelector('.popoverContent');
-  const isVisible = popoverContent.style.display === 'block';
-  popoverContent.style.display = isVisible ? 'none' : 'block';
-}
-    icons.forEach(icon => {
-      icon.addEventListener('click', togglePopover);
-    });
-  
-    posts.reverse();
+      posts.reverse();
     posts.forEach(post => {
       const postElement = renderPost(post);
       postsContainer.insertAdjacentHTML('beforeend', postElement);
@@ -177,20 +174,77 @@ function renderPost(post) {
   }
 window.addEventListener('load', loadPosts);
 
+loadPosts();
+$('#post-container').on('click', '.popoverIcon', function() {
 
+  $(this).siblings('.popover-content').toggleClass('show');
+});
 
 </script> 
+ -->
+
+ <script>
+  function renderPost(post) {
+      // Changed from id to class for popoverIcon
+      return `
+        <div class="card mb-3">
+          <div class="card-header">
+            <img class="avatar" src="${post.userprofile}" alt="User Avatar">
+            <div class="user-info">
+              <div class="user-name">${post.username}</div>
+              <div class="timestamp">${new Date(post.timestamp).toLocaleString()}</div>
+            </div>
+            <i class="fas fa-ellipsis-h nice-icon ml-auto popoverIcon"></i> 
+          </div>
+          <div class="popover-content">
+            <a href="./edit.html"><button class="popover-action-btn">Edit Post</button></a>
+            <button class="popover-action-btn">Delete Post</button>
+          </div>
+          <div class="card-body">
+            <p class="tweet-text">${post.text}</p>
+            ${post.image ? `<img src="${post.image}" class="post-image" alt="Post Image">` : ''}
+          </div>
+          <div class="card-footer">
+            <i class="fa-regular fa-heart" aria-hidden="true"></i>
+            <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
+            <i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>
+          </div> 
+        </div>
+      `;
+  }
+  
+  function loadPosts() {
+      const postsContainer = document.getElementById('post-container');
+      const posts = JSON.parse(localStorage.getItem('posts')) || [];
+      posts.reverse();
+      posts.forEach(post => {
+        const postElement = renderPost(post);
+        postsContainer.insertAdjacentHTML('beforeend', postElement);
+      });
+  }
+  
+  document.addEventListener('DOMContentLoaded', loadPosts);
+  
+  // Using event delegation for dynamically loaded content
+  document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('popoverIcon')) {
+          // Find the closest parent with class 'card-header' and then the next sibling which is the 'popover-content'
+          const popoverContent = event.target.closest('.card-header').nextElementSibling;
+          if (popoverContent) {
+              popoverContent.classList.toggle('show');
+          } else {
+              console.error('Popover content not found for icon: ', event.target);
+          }
+      }
+  });
+  </script>
+  
 
 
 
- 
+
 
 
 
 </body>
 </html>
-
-
-
-
-
