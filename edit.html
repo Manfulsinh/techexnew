@@ -31,7 +31,8 @@
   
  
   <div class="page">
-    <textarea id="edit-tex" placeholder="" ></textarea>
+    <textarea id="edit-text" placeholder=""></textarea>
+
     
       
     </div>
@@ -103,7 +104,8 @@
                     </div>
                     <div class="col-sm-6">
                    
-                      <button type="button" class="btn btn-primary-3" id="updateButton">Update</button>
+                      <button type="button" class="btn btn-primary-3" id="update-post-button">Update</button>
+
 
                     </div>
                   </div>
@@ -122,74 +124,129 @@
   });
 
 </script>  
+
+
+
+ <script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+
+
+  const resetIcon = document.getElementById('reset-icon');
+  if (resetIcon) {
+    resetIcon.addEventListener('click', function() {
+   
+      const previewImage = document.getElementById('preview-image');
+      if (previewImage) {
+        previewImage.src = '';
+
+
+        previewImage.src = '';
+      }
+     
+
+
+
+
+
+
+
+
+
+      
+    });
+  }
+});
+
+</script> -->
+
+
+
 <script>
-  
-  const imageIcon = document.getElementById('image-icon');
-  const postImageInput = document.getElementById('post-image');
+
+document.addEventListener('DOMContentLoaded', function() {
+  bindEventListeners();
+
+
+  const postId = getPostIdFromUrl(); 
+  if (postId) {
+    loadPostData(postId);
+  }
+});
+
+function getPostIdFromUrl() {
+  const queryParams = new URLSearchParams(window.location.search);
+  return queryParams.get('postId');
+}
+
+function loadPostData(postId) {
+  const posts = JSON.parse(localStorage.getItem('posts')) || [];
+  const postData = posts.find(post => post.id === postId);
+  if (postData) {
+    fillEditFields(postData);
+  } else {
+    alert('Post not found');
+  }
+}
+
+function fillEditFields(postData) {
+  const editText = document.getElementById('edit-text'); 
   const previewImage = document.getElementById('preview-image');
 
- 
-  imageIcon.addEventListener('click', () => {
+  editText.value = postData.text;
+  if (postData.image) {
+    previewImage.src = postData.image;
+  }
+}
 
-    postImageInput.click();
-  });
+function bindEventListeners() {
+  const updateButton = document.getElementById('update-post-button');
+  const postImageInput = document.getElementById('post-image');
+  if (updateButton && postImageInput) {
+    updateButton.addEventListener('click', function() {
+      const postId = getPostIdFromUrl();
+      const editText = document.getElementById('edit-text'); 
 
-
-  postImageInput.addEventListener('change', () => {
-    const file = postImageInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-
- 
-      reader.onload = () => {
-        previewImage.src = reader.result;
-        localStorage.setItem('selectedImage', reader.result);
-
+      const updatedData = {
+        text: editText.value
       };
 
-
-      reader.readAsDataURL(file);
-    }
-  });
-</script>  
- 
- <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var myDiv = document.getElementById("myDiv");
-    var textAreaDiv = document.getElementById("textAreaDiv");
- 
-  });
-
-
-
-
-// When the page loads, we populate the fields with the post data
-document.addEventListener('DOMContentLoaded', function() {
-  const postToEdit = JSON.parse(localStorage.getItem('postToEdit'));
-  if (postToEdit) {
-    document.getElementById('edit-text').value = postToEdit.text; // Set the text
-    document.getElementById('preview-image').src = postToEdit.image; // Set the image
+      const file = postImageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          updatedData.image = e.target.result;
+          updatePost(postId, updatedData);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        updatePost(postId, updatedData);
+      }
+    });
   }
-});
-document.getElementById('updateButton').addEventListener('click', () => {
-  const updatedText = document.getElementById('edit-text').value;
-  const updatedImage = localStorage.getItem('selectedImage'); // You set this when the image is updated
-  // Now, update the post in your local storage or server
-  // For local storage, it would look something like this:
+}
+
+function updatePost(postId, updatedData) {
   const posts = JSON.parse(localStorage.getItem('posts')) || [];
-  const postIndex = posts.findIndex(post => post.id === postToEdit.id);
+  const postIndex = posts.findIndex(post => post.id === postId);
   if (postIndex > -1) {
-    posts[postIndex].text = updatedText;
-    posts[postIndex].image = updatedImage;
+    posts[postIndex] = {...posts[postIndex], ...updatedData};
     localStorage.setItem('posts', JSON.stringify(posts));
+    alert('Post updated successfully');
+    window.location.href = 'chat.html';
+  } else {
+    alert('Post not found');
   }
-  window.location.href = '/chat.html'; // Navigate back to chat page
-});
+}
 
 
 
-  </script>     
-  
+</script>
+
+
+
 
 
       </body>

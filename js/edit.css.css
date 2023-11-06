@@ -35,7 +35,9 @@
   margin-top: 51px;
   }
 
-  #edit-tex {
+
+
+  textarea#edit-text {
     width: 90%;
     height: 100px;
     resize: none;
@@ -44,7 +46,8 @@
     padding: 10px;
     font-size: 16px;
     margin-bottom: 10px;
-    }
+}
+
 
 .edit {
     border: 2px solid #0d6efd;

@@ -28,7 +28,8 @@
         <a class="nav-link" href="#">Create Post</a>
       </li>
     </ul>
-    <i class="fa-solid fa-xmark"></i>
+ 
+    <i class="fa-solid fa-xmark" id="xmark-icon"></i>
     
   </nav>
 
@@ -86,7 +87,14 @@
 
 <script src="/js/jquery-3.6.1.min.js"></script>
 
-
+<script>
+  const xmarkIcon = document.getElementById("xmark-icon");
+   xmarkIcon.addEventListener("click", () => {
+ 
+     window.history.back();
+   });
+ 
+ </script> 
 
 
    <script>
@@ -105,7 +113,8 @@ function createPostObject(postText, base64String) {
     image: base64String,
     timestamp: new Date().toISOString(),
     username:localStorage.getItem('Name'),
-    userprofile:localStorage.getItem('photoURL')
+    userprofile:localStorage.getItem('photoURL'),
+    id: new Date().getTime().toString() 
   };
 }
 
@@ -148,5 +157,83 @@ function handlePost() {
 document.getElementById('post-button').addEventListener('click', handlePost);
 
    </script>
+
+
+
+<script type="module">
+
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+  import {getFirestore,collection,addDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
+    authDomain: "fir-b6449.firebaseapp.com",
+    projectId: "fir-b6449",
+    storageBucket: "fir-b6449.appspot.com",
+    messagingSenderId: "511184942927",
+    appId: "1:511184942927:web:debcb811d15856fd86b73a",
+    measurementId: "G-2TM34PV1YN"
+  };
+
+
+
+  const app = initializeApp(firebaseConfig);
+
+
+  const db = getFirestore(app);
+const username= localStorage.getItem('Name')
+const userprofile = localStorage.getItem('photoURL')
+  
+  function savePostToFirestore(postText, base64Image) {
+    const post = {
+      text: postText,
+      image: base64Image,
+      timestamp: serverTimestamp(), 
+      username: username,
+      userprofile: userprofile,
+    };
+
+
+    addDoc(collection(db, "posts"), post)
+      .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+  }
+
+
+
+
+  document.getElementById('post-button').addEventListener('click', function() {
+    const postText = document.getElementById('post-text').value;
+    const fileInput = document.getElementById('post-image');
+    const file = fileInput.files[0];
+
+    if (file) {
+      readFileAsBase64(file, function(base64Image) {
+
+        savePostToFirestore(postText, base64Image);
+      });
+    } else {
+      
+      savePostToFirestore(postText, null);
+    }
+  });
+
+
+  function readFileAsBase64(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      callback(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+
+
+
 </body>
 </html>
