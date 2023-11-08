@@ -1,169 +1,146 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>TechX</title>
     <link rel="shortcut icon" href="image/logo1-remove.png" type="image/x-icon">
-
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/font-awesome.min.css">
-      <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./js/main.css">
 </head>
 <body>
+    <style>
+        /* html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        img {
+            max-width: 50%;
+            height: auto;
+        }
+
+        .facebook {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            font-size: 1rem;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+        }
+
+        button#glogin {
+            width: 93%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 1rem;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+        }
+
+        .social-login svg {
+            width: 1em;
+            height: 1em;
+            margin-right: 8px;
+        }
 
 
-<style>
+        @media (min-width: 768px) {
+
+            .social-login button,
+            .sign-out {
+                width: auto;
+                padding: 10px 20px;
+            }
 
 
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-
-img {
-    max-width: 50%;
-    height: auto;
-}
-
-
-.facebook {
-    width: 100%; 
-    max-width: 300px;
-    padding: 15px;
-    font-size: 1rem;
-    margin: 10px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-}
-
-
-button#glogin {
-  width: 93%; 
-    max-width: 300px;
-    padding: 10px;
-    font-size: 1rem;
-    margin: 10px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-}
-
-
-
-
-.social-login svg {
-    width: 1em;
-    height: 1em;
-    margin-right: 8px;
-}
-
-
-@media (min-width: 768px) {
-    .social-login button, .sign-out {
-        width: auto; 
-        padding: 10px 20px;
-    }
-
-
-    .container {
-        padding: 40px;
-    }
-}
-
-
-
-</style>
-
-  
-     <div class="container">
-    
-      
-            <div>
-                <center><img src="/img/TechX_logo-remove.png" alt=""></center>
-            </div>
-            <div>
-                <div class="social-login">
-                 
-                    <center>
+            .container {
+                padding: 40px;
+            }
+        } */
+    </style>
+    <div class="container">
+        <div>
+            <center><img src="/img/TechX_logo-remove.png" alt=""></center>
+        </div>
+        <div>
+            <div class="social-login">
+                <center>
                     <button class="facebook" id="flogin">
-                        <svg xmlns="http://www.w3.org/2000/svg"fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
-                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-                      </svg>&emsp;LOG IN WITH FACEBOOK</button><br>
-                    <button class="social-signin google" id="glogin"\>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
-                        <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
-                      </svg>&emsp;LOG IN WITH GOOGLE</button>
-                    </center>
-                </div>
-<!--                 
-                <button class="sign-out" id="signOut">LOG OUT</button> -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-facebook"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+                        </svg>&emsp;LOG IN WITH FACEBOOK</button><br>
+                    <button class="social-signin google" id="glogin" \>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-google"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
+                        </svg>&emsp;LOG IN WITH GOOGLE</button>
+                </center>
             </div>
+            <!--                 
+                <button class="sign-out" id="signOut">LOG OUT</button> -->
+        </div>
     </div>
-     
 
+    <script type="module">
 
-
- 
-
-
-
-
-
-
-       <script type="module">
-      
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         // import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-    
+
         const firebaseConfig = {
-          apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
-          authDomain: "fir-b6449.firebaseapp.com",
-          projectId: "fir-b6449",
-          storageBucket: "fir-b6449.appspot.com",
-          messagingSenderId: "511184942927",
-          appId: "1:511184942927:web:debcb811d15856fd86b73a",
-          measurementId: "G-2TM34PV1YN"
+            apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
+            authDomain: "fir-b6449.firebaseapp.com",
+            projectId: "fir-b6449",
+            storageBucket: "fir-b6449.appspot.com",
+            messagingSenderId: "511184942927",
+            appId: "1:511184942927:web:debcb811d15856fd86b73a",
+            measurementId: "G-2TM34PV1YN"
         };
-    
-     
+
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-    
-   
+
+
         const googleProvider = new GoogleAuthProvider();
         const facebookProvider = new FacebookAuthProvider();
-    
-      
+
+
         document.getElementById('glogin').addEventListener('click', (e) => {
-            signInWithPopup(auth, googleProvider) 
+            signInWithPopup(auth, googleProvider)
                 .then((result) => {
-                    
+
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.accessToken;
                     const user = result.user;
-    
+
                     console.log("User Logged in");
                     localStorage.setItem("Name", user.displayName);
                     localStorage.setItem("emailID", user.email);
@@ -171,17 +148,17 @@ button#glogin {
                     alert("User Login: " + user.displayName);
                     window.location.href = 'indexfile/chat.html';
                 }).catch((error) => {
-                    
+
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     alert(errorMessage);
                 });
         });
-    
+
         document.getElementById('flogin').addEventListener('click', (e) => {
             signInWithPopup(auth, facebookProvider)
                 .then((result) => {
-                  
+
                     const user = result.user;
                     alert("User Logged in: " + user.displayName);
                     console.log("User Logged in");
@@ -190,7 +167,7 @@ button#glogin {
                     localStorage.setItem("photoURL", user.photoURL);
                     window.location.href = 'indexfile/chat.html';
                 }).catch((error) => {
-                    
+
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     alert(errorMessage);
@@ -198,70 +175,6 @@ button#glogin {
                 });
         });
 
-
-//         const app = initializeApp(firebaseConfig);
-//   const auth = getAuth(app);
-
-//   const googleProvider = new GoogleAuthProvider();
-//   const facebookProvider = new FacebookAuthProvider();
-
-//   document.addEventListener('DOMContentLoaded', (event) => {
-//       if (localStorage.getItem("isLogin") === "true") {
-//           window.location.href = 'chat.html';
-//       }
-//   });
-
-//   document.getElementById('glogin').addEventListener('click', (e) => {
-//       signInWithPopup(auth, googleProvider)
-//           .then((result) => {
-
-//               localStorage.setItem("isLogin", "true");
-//               window.location.href = 'chat.html';
-//           }).catch((error) => {
-            
-//           });
-//   });
-
-//   document.getElementById('flogin').addEventListener('click', (e) => {
-//       signInWithPopup(auth, facebookProvider)
-//           .then((result) => {
-           
-//               localStorage.setItem("isLogin", "true");
-//               window.location.href = 'chat.html';
-//           }).catch((error) => {
-//             .
-//           });
-//   });
-
-
-//   document.getElementById('signOut').addEventListener('click', (e) => {
-//       signOut(auth).then(() => {
-//           localStorage.setItem("isLogin", "false");
-//           window.location.href = 'index.html'; 
-//       }).catch((error) => {
-       
-//       });
-//   });
-
-
-//   window.onload = function() {
- 
-//   if(localStorage.getItem("isLogin") !== "true") {
-  
-//     window.location.href = 'index.html'; 
-//   }
-
-// };
-
-
-        
     </script>
-
- 
-
-
-
-
-
 </body>
 </html>
