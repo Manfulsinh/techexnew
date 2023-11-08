@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,13 +29,13 @@
     
   </nav>
   
- 
   <div class="page">
     <textarea id="edit-text" placeholder=""></textarea>
 
     
       
     </div>
+    
     
 
  <div class="container">
@@ -99,13 +99,9 @@
 
                   <div class="delete">
                     <div class="row">
-                    <div class="col-sm-6">
-                      <button type="button" class="btn btn-dange-3">Delete</button>
-                    </div>
-                    <div class="col-sm-6">
                    
-                      <button type="button" class="btn btn-primary-3" id="update-post-button">Update</button>
-
+                    <div class="col-sm-12">
+            <button type="button" class="btn btn-primary-3" id="update-post-button">Update Post</button>
 
                     </div>
                   </div>
@@ -160,100 +156,177 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-</script> -->
+</script> 
 
 
 
-<script>
-
-document.addEventListener('DOMContentLoaded', function() {
-  bindEventListeners();
+<script type="module">
 
 
-  const postId = getPostIdFromUrl(); 
-  if (postId) {
-    loadPostData(postId);
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+import {
+  getFirestore, doc, getDoc, updateDoc
+} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+import {
+  getStorage, ref as storageRef, uploadBytes, getDownloadURL
+} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js';
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
+    authDomain: "fir-b6449.firebaseapp.com",
+    projectId: "fir-b6449",
+    storageBucket: "fir-b6449.appspot.com",
+    messagingSenderId: "511184942927",
+    appId: "1:511184942927:web:debcb811d15856fd86b73a",
+    measurementId: "G-2TM34PV1YN"
+  };
+
+  const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+
+
+
+function getQueryParams() {
+        const queryParams = new URLSearchParams(window.location.search);
+        return {
+          postId: queryParams.get('postId') 
+        };
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function populateForm(postId) {
+  const postRef = doc(db, 'posts', postId);
+  const postSnap = await getDoc(postRef);
+
+  if (postSnap.exists()) {
+    console.log(postSnap.data())
+    const postData = postSnap.data();
+    document.getElementById('edit-text').value = postData.postObject.text || '';
+  
+    const previewImage = document.getElementById('preview-image');
+    if (postData.postObject.image) {
+      previewImage.src = postData.postObject.image;
+    } else {
+      previewImage.src = ''; 
+    }
+  } else {
+    console.log('No such document!');
+  }
+}
+
+
+async function updatePost(postId) {
+            const editTextValue = document.getElementById('edit-text').value;
+            const postRef = doc(db, 'posts', postId);
+            await updateDoc(postRef, {
+                'postObject.text': editTextValue  
+            });
+
+            alert('Post updated!');
+            window.location.href = 'chat.html'; 
+        }
+      
+  document.addEventListener('DOMContentLoaded', async () => {
+            const { postId } = getQueryParams();
+            if (postId) {
+                populateForm(postId);
+                document.getElementById('update-post-button').addEventListener('click', () => {
+                    updatePost(postId);
+                });
+            } else {
+                console.error('No post ID in query parameters');
+            }
+        });
+
+
+
+
+
+
+
+
+        document.getElementById('post-image').addEventListener('change', async function(event) {
+  const file = event.target.files[0];
+  const postId = getQueryParams().postId; 
+
+  if (!file) {
+    console.log("No file selected");
+    return;
+  }
+
+  const storageReference = storageRef(storage, 'path/to/your/images/' + file.name);
+  
+  try {
+    const snapshot = await uploadBytes(storageReference, file);
+    console.log('Uploaded a blob or file!');
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    const postRef = doc(db, 'posts', postId);
+    await updateDoc(postRef, {
+      'postObject.image': downloadURL
+    });
+
+    const previewImage = document.getElementById('preview-image');
+    previewImage.src = downloadURL;
+    alert('Image updated!');
+  } catch (error) {
+    console.error("Error uploading file:", error);
   }
 });
 
-function getPostIdFromUrl() {
-  const queryParams = new URLSearchParams(window.location.search);
-  return queryParams.get('postId');
-}
 
-function loadPostData(postId) {
-  const posts = JSON.parse(localStorage.getItem('posts')) || [];
-  const postData = posts.find(post => post.id === postId);
-  if (postData) {
-    fillEditFields(postData);
-  } else {
-    alert('Post not found');
+
+
+document.getElementById('reset-icon').addEventListener('click', async function() {
+  const defaultImage = '';
+  const postId = getQueryParams().postId;
+  if (!postId) {
+    console.error("No post ID in query parameters");
+    return;
   }
-}
-
-function fillEditFields(postData) {
-  const editText = document.getElementById('edit-text'); 
-  const previewImage = document.getElementById('preview-image');
-
-  editText.value = postData.text;
-  if (postData.image) {
-    previewImage.src = postData.image;
-  }
-}
-
-function bindEventListeners() {
-  const updateButton = document.getElementById('update-post-button');
-  const postImageInput = document.getElementById('post-image');
-  if (updateButton && postImageInput) {
-    updateButton.addEventListener('click', function() {
-      const postId = getPostIdFromUrl();
-      const editText = document.getElementById('edit-text'); 
-
-      const updatedData = {
-        text: editText.value
-      };
-
-      const file = postImageInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          updatedData.image = e.target.result;
-          updatePost(postId, updatedData);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        updatePost(postId, updatedData);
-      }
+  try {
+   
+    const previewImage = document.getElementById('preview-image');
+    previewImage.src = defaultImage;
+    
+   
+    const postRef = doc(db, 'posts', postId);
+    await updateDoc(postRef, {
+      'postObject.image': defaultImage
     });
+    
+    alert('Image removed!');
+    
+  } catch (error) {
+    console.error("Error removing image:", error);
   }
-}
-
-function updatePost(postId, updatedData) {
-  const posts = JSON.parse(localStorage.getItem('posts')) || [];
-  const postIndex = posts.findIndex(post => post.id === postId);
-  if (postIndex > -1) {
-    posts[postIndex] = {...posts[postIndex], ...updatedData};
-    localStorage.setItem('posts', JSON.stringify(posts));
-    alert('Post updated successfully');
-    window.location.href = 'chat.html';
-  } else {
-    alert('Post not found');
-  }
-}
+});
 
 
 
-</script>
 
 
+        
+    </script>
 
 
 
       </body>
       </html>
    
-      
-      
-      
-      
       

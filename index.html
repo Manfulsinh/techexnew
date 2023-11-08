@@ -134,8 +134,8 @@ button#glogin {
        <script type="module">
       
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-    
+        // import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
     
         const firebaseConfig = {
           apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
@@ -197,6 +197,61 @@ button#glogin {
                     console.error(error);
                 });
         });
+
+
+//         const app = initializeApp(firebaseConfig);
+//   const auth = getAuth(app);
+
+//   const googleProvider = new GoogleAuthProvider();
+//   const facebookProvider = new FacebookAuthProvider();
+
+//   document.addEventListener('DOMContentLoaded', (event) => {
+//       if (localStorage.getItem("isLogin") === "true") {
+//           window.location.href = 'chat.html';
+//       }
+//   });
+
+//   document.getElementById('glogin').addEventListener('click', (e) => {
+//       signInWithPopup(auth, googleProvider)
+//           .then((result) => {
+
+//               localStorage.setItem("isLogin", "true");
+//               window.location.href = 'chat.html';
+//           }).catch((error) => {
+            
+//           });
+//   });
+
+//   document.getElementById('flogin').addEventListener('click', (e) => {
+//       signInWithPopup(auth, facebookProvider)
+//           .then((result) => {
+           
+//               localStorage.setItem("isLogin", "true");
+//               window.location.href = 'chat.html';
+//           }).catch((error) => {
+//             .
+//           });
+//   });
+
+
+//   document.getElementById('signOut').addEventListener('click', (e) => {
+//       signOut(auth).then(() => {
+//           localStorage.setItem("isLogin", "false");
+//           window.location.href = 'index.html'; 
+//       }).catch((error) => {
+       
+//       });
+//   });
+
+
+//   window.onload = function() {
+ 
+//   if(localStorage.getItem("isLogin") !== "true") {
+  
+//     window.location.href = 'index.html'; 
+//   }
+
+// };
 
 
         
