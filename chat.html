@@ -256,16 +256,13 @@ border: 1px solid blue;
 }
 
 .mobilebar-tab {
-height: 50px;
 
-width: 100vw;
 background-color: #fff;
-box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.175);
-border-radius: 6px;
-overflow: hidden;
-border: 10px solid #fff;
+
+
+
 display: flex;
-position: relative;
+position:fixed;
 flex-shrink: 0;
 bottom: 0px;
 }
@@ -492,15 +489,16 @@ display: block;
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
     import {
       getFirestore,
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-  updateDoc,
-  increment,
-  getDoc, // Make sure this import is added
-  runTransaction 
+    collection,
+    getDocs,
+    deleteDoc,
+    doc,
+    updateDoc,
+    getDoc,
+    runTransaction,
+    onSnapshot
     } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+    
     
     const firebaseConfig = {
         apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
@@ -535,9 +533,35 @@ function updateLikeCountUI(postId, newType, oldType) {
 
 }
 
-async function updateLikeCount(postId, newType, oldType = null) {
-  try {
+// async function updateLikeCount(postId, userId, newType, oldType = null) {
+//   const postRef = doc(db, 'posts', postId);
+//   const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+
+//   await runTransaction(db, async (transaction) => {
+//     const postDoc = await transaction.get(postRef);
+//     if (!postDoc.exists()) {
+//       throw new Error("Document does not exist!");
+//     }
+
+//     const postData = postDoc.data();
+//     const likes = postData.likes || {};
+//     const updatedLikes = { ...likes };
+
+//     if (oldType) {
+//       updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+//     }
+//     updatedLikes[newType] = (likes[newType] || 0) + 1;
+
+//     transaction.update(postRef, { likes: updatedLikes });
+//     transaction.set(userLikeRef, { type: newType });
+//   });
+// }
+
+
+
+async function updateLikeCount(postId, userId, newType, oldType = null) {
     const postRef = doc(db, 'posts', postId);
+    const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
 
     await runTransaction(db, async (transaction) => {
       const postDoc = await transaction.get(postRef);
@@ -547,23 +571,54 @@ async function updateLikeCount(postId, newType, oldType = null) {
 
       const postData = postDoc.data();
       const likes = postData.likes || {};
-      const newLikesCount = (likes[newType] || 0) + 1;
-      const updatedLikes = { ...likes, [newType]: newLikesCount };
+      const updatedLikes = { ...likes };
 
-  
-      if (oldType && likes[oldType]) {
+      if (oldType) {
         updatedLikes[oldType] = (likes[oldType] || 0) - 1;
       }
+      updatedLikes[newType] = (likes[newType] || 0) + 1;
 
-      transaction.update(postRef, { likes: updatedLikes, userLastLike: newType });
+      // Update the latest like timestamp
+      transaction.update(postRef, { 
+        likes: updatedLikes, 
+        latestLikeTimestamp: Date.now() 
+      });
+      transaction.set(userLikeRef, { type: newType });
     });
+  }
 
+async function incrementLikeCount(postId, userId, newType) {
+  const postRef = doc(db, 'posts', postId);
+  const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
 
-    updateLikeCountUI(postId, newType, oldType);
-  } catch (error) {
-    console.error("Failed to update like count:", error);
+  const postDoc = await getDoc(postRef);
+  const userLikeDoc = await getDoc(userLikeRef);
+
+  if (postDoc.exists()) {
+    const userLikeData = userLikeDoc.data();
+    const oldType = userLikeData ? userLikeData.type : null;
+
+    if (newType !== oldType) {
+     
+      await updateLikeCount(postId, userId, newType, oldType);
+    } else {
+      console.log("User has already liked this post with the same type.");
+    }
+  } else {
+    console.log("Post does not exist.");
   }
 }
+
+
+
+async function getPostsRealTime() {
+    const postsCol = collection(db, 'posts');
+    onSnapshot(postsCol, (snapshot) => {
+      const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderPosts(postsList);
+    });
+  }
+
  async function getPosts() {
       const postsCol = collection(db, 'posts'); 
       try {
@@ -611,6 +666,7 @@ async function updateLikeCount(postId, newType, oldType = null) {
       return;
     }
     posts.sort((a, b) => b.postObject.timestamp.seconds - a.postObject.timestamp.seconds);
+    posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
     postsElement.innerHTML = '';
     
    
@@ -653,16 +709,15 @@ async function updateLikeCount(postId, newType, oldType = null) {
   
   
         const heartIcon = card.querySelector('[data-type="heart"]');
-const smileIcon = card.querySelector('[data-type="smile"]');
-const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
+      const smileIcon = card.querySelector('[data-type="smile"]');
+      const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
 
-heartIcon.addEventListener('click', () => incrementLikeCount(post.id, 'heart'));
-smileIcon.addEventListener('click', () => incrementLikeCount(post.id, 'smile'));
-thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'thumbs-up'));
+      heartIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'heart'));
+      smileIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'smile'));
+      thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'thumbs-up'));
 
       postsElement.appendChild(card);
-  
-      });
+    });
     }
    
 
@@ -671,26 +726,9 @@ thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'thumbs
 
 
 
-    async function incrementLikeCount(postId, type, userId) {
 
-  const postRef = doc(db, 'posts', postId);
-  const postDoc = await getDoc(postRef);
 
-  if (postDoc.exists()) {
-    const postData = postDoc.data();
-    const lastLikeType = postData.userLastLike;
-
-    if (lastLikeType && lastLikeType !== type) {
-  
-      await updateLikeCount(postId, type, lastLikeType);
-    } else if (!lastLikeType) {
-      
-      await updateLikeCount(postId, type);
-    } 
-  }
-
-}
-    getPosts();
+    getPostsRealTime();
   
     </script> 
 
