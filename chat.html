@@ -1,4 +1,7 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,37 +530,20 @@ display: block;
 
 
 
+  function updateLikeCountUI(postId, newType, oldType) {
+  const postElement = document.getElementById(postId); // Assuming postId is the HTML id of the post
+  if (postElement) {
+    const newTypeCountElement = postElement.querySelector(`.like-count[data-type="${newType}"]`);
+    let newTypeCount = parseInt(newTypeCountElement.textContent);
+    newTypeCountElement.textContent = newTypeCount + 1;
 
-
-function updateLikeCountUI(postId, newType, oldType) {
-
+    if (oldType) {
+      const oldTypeCountElement = postElement.querySelector(`.like-count[data-type="${oldType}"]`);
+      let oldTypeCount = parseInt(oldTypeCountElement.textContent);
+      oldTypeCountElement.textContent = oldTypeCount - 1;
+    }
+  }
 }
-
-// async function updateLikeCount(postId, userId, newType, oldType = null) {
-//   const postRef = doc(db, 'posts', postId);
-//   const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
-
-//   await runTransaction(db, async (transaction) => {
-//     const postDoc = await transaction.get(postRef);
-//     if (!postDoc.exists()) {
-//       throw new Error("Document does not exist!");
-//     }
-
-//     const postData = postDoc.data();
-//     const likes = postData.likes || {};
-//     const updatedLikes = { ...likes };
-
-//     if (oldType) {
-//       updatedLikes[oldType] = (likes[oldType] || 0) - 1;
-//     }
-//     updatedLikes[newType] = (likes[newType] || 0) + 1;
-
-//     transaction.update(postRef, { likes: updatedLikes });
-//     transaction.set(userLikeRef, { type: newType });
-//   });
-// }
-
-
 
 async function updateLikeCount(postId, userId, newType, oldType = null) {
     const postRef = doc(db, 'posts', postId);
@@ -573,43 +559,88 @@ async function updateLikeCount(postId, userId, newType, oldType = null) {
       const likes = postData.likes || {};
       const updatedLikes = { ...likes };
 
+    
       if (oldType) {
         updatedLikes[oldType] = (likes[oldType] || 0) - 1;
       }
       updatedLikes[newType] = (likes[newType] || 0) + 1;
 
-      // Update the latest like timestamp
+      let totalLikes = postData.totalLikes || 0;
+      if (oldType !== newType) {
+        totalLikes += (oldType ? 0 : 1) - (likes[oldType] === 1 ? 1 : 0);
+      }
+
       transaction.update(postRef, { 
-        likes: updatedLikes, 
+        likes: updatedLikes,
+        totalLikes: totalLikes, 
         latestLikeTimestamp: Date.now() 
       });
       transaction.set(userLikeRef, { type: newType });
     });
   }
+//   async function incrementLikeCount(postId, userId, newType) {
+//   const postRef = doc(db, 'posts', postId);
+//   const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+
+//   const postDoc = await getDoc(postRef);
+//   const userLikeDoc = await getDoc(userLikeRef);
+
+//   if (postDoc.exists()) {
+//     const userLikeData = userLikeDoc.data();
+//     const oldType = userLikeData ? userLikeData.type : null;
+
+//     if (newType !== oldType) {
+//       await updateLikeCount(postId, userId, newType, oldType);
+//       updateLikeCountUI(postId, newType, oldType);
+//     } else {
+//       console.log("User has already liked this post with the same type.");
+//     }
+//   } else {
+//     console.log("Post does not exist.");
+//   }
+// }
 
 async function incrementLikeCount(postId, userId, newType) {
-  const postRef = doc(db, 'posts', postId);
-  const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+    const postRef = doc(db, 'posts', postId);
+    const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
 
-  const postDoc = await getDoc(postRef);
-  const userLikeDoc = await getDoc(userLikeRef);
+    await runTransaction(db, async (transaction) => {
+        const postDoc = await transaction.get(postRef);
+        if (!postDoc.exists()) {
+            throw new Error("Document does not exist!");
+        }
 
-  if (postDoc.exists()) {
-    const userLikeData = userLikeDoc.data();
-    const oldType = userLikeData ? userLikeData.type : null;
+        const postData = postDoc.data();
+        const likes = postData.likes || {};
+        const userLikes = postData.userLikes || {};
 
-    if (newType !== oldType) {
-     
-      await updateLikeCount(postId, userId, newType, oldType);
-    } else {
-      console.log("User has already liked this post with the same type.");
-    }
-  } else {
-    console.log("Post does not exist.");
-  }
+        // Check if the user has already liked the post with a different type
+        if (userLikes[userId] !== newType) {
+            // Update like counts
+            if (userLikes[userId]) {
+                // If the user has already liked with a different type, decrement that type's count
+                likes[userLikes[userId]] = (likes[userLikes[userId]] || 0) - 1;
+            }
+            // Increment the new like type count
+            likes[newType] = (likes[newType] || 0) + 1;
+
+            // Update user likes
+            userLikes[userId] = newType;
+
+            // Update the post document
+            transaction.update(postRef, {
+                likes: likes,
+                userLikes: userLikes,
+                totalLikes: Object.values(likes).reduce((a, b) => a + b, 0), // Sum of all likes
+                latestLikeTimestamp: Date.now()
+            });
+        }
+    }).then(() => {
+        console.log("Transaction successfully committed!");
+    }).catch((error) => {
+        console.log("Transaction failed: ", error);
+    });
 }
-
-
 
 async function getPostsRealTime() {
     const postsCol = collection(db, 'posts');
