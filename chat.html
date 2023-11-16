@@ -328,39 +328,7 @@ display: block;
   font-weight: 700;
   font-size: 13px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </style>
+ </style>
  
 <div class="allchat">
   <div class="chat-home">
@@ -459,16 +427,32 @@ display: block;
 
 
   
-  function loadPosts() {
-      const postsContainer = document.getElementById('post-container');
-      const posts = JSON.parse(localStorage.getItem('posts')) || [];
-      posts.reverse();
-      posts.forEach(post => {
-        const postElement = renderPost(post);
-        postsContainer.insertAdjacentHTML('beforeend', postElement);
-      });
-  }
+  // function loadPosts() {
+  //     const postsContainer = document.getElementById('post-container');
+  //     const posts = JSON.parse(localStorage.getItem('posts')) || [];
+  //     posts.reverse();
+  //     posts.forEach(post => {
+  //       const postElement = renderPost(post);
+  //       postsContainer.insertAdjacentHTML('beforeend', postElement);
+  //     });
+  // }
   
+
+  function loadPosts() {
+  const postsContainer = document.getElementById('post-container');
+  const posts = JSON.parse(localStorage.getItem('posts')) || [];
+  
+  // Reverse the array here
+  posts.reverse();
+
+  posts.forEach(post => {
+    const postElement = renderPost(post);
+    postsContainer.insertAdjacentHTML('beforeend', postElement);
+  });
+}
+
+
+
   document.addEventListener('DOMContentLoaded', loadPosts);
   
 
@@ -555,7 +539,6 @@ async function updateLikeCount(postId, newType, oldType = null) {
   try {
     const postRef = doc(db, 'posts', postId);
 
-    // Begin a transaction to ensure data consistency
     await runTransaction(db, async (transaction) => {
       const postDoc = await transaction.get(postRef);
       if (!postDoc.exists()) {
@@ -567,36 +550,21 @@ async function updateLikeCount(postId, newType, oldType = null) {
       const newLikesCount = (likes[newType] || 0) + 1;
       const updatedLikes = { ...likes, [newType]: newLikesCount };
 
-      // If changing like types, decrement the old like
+  
       if (oldType && likes[oldType]) {
         updatedLikes[oldType] = (likes[oldType] || 0) - 1;
       }
 
-      // Update the document's like count
       transaction.update(postRef, { likes: updatedLikes, userLastLike: newType });
     });
 
-    // Optionally update the UI
+
     updateLikeCountUI(postId, newType, oldType);
   } catch (error) {
     console.error("Failed to update like count:", error);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    async function getPosts() {
+ async function getPosts() {
       const postsCol = collection(db, 'posts'); 
       try {
         const postsSnapshot = await getDocs(postsCol);
@@ -642,7 +610,9 @@ async function updateLikeCount(postId, newType, oldType = null) {
       console.error('No element with id "posts" found.');
       return;
     }
+    posts.sort((a, b) => b.postObject.timestamp.seconds - a.postObject.timestamp.seconds);
     postsElement.innerHTML = '';
+    
    
     posts.forEach(post => {
         const postIdPrefix = /^\d/.test(post.id) ? '_' : '';
@@ -702,7 +672,7 @@ thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'thumbs
 
 
     async function incrementLikeCount(postId, type, userId) {
-  // First, check the current state of the user's last like
+
   const postRef = doc(db, 'posts', postId);
   const postDoc = await getDoc(postRef);
 
@@ -711,12 +681,12 @@ thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'thumbs
     const lastLikeType = postData.userLastLike;
 
     if (lastLikeType && lastLikeType !== type) {
-      // If there was a previous like of a different type, decrement it
+  
       await updateLikeCount(postId, type, lastLikeType);
     } else if (!lastLikeType) {
-      // If there was no previous like, just increment the new type
+      
       await updateLikeCount(postId, type);
-    } // No else - if the last like type is the same, we do nothing (user cannot like twice)
+    } 
   }
 
 }
