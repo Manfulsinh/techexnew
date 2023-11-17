@@ -1,7 +1,5 @@
 
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -354,7 +352,7 @@ display: block;
 
 
  <div class="card-3">
-    <div id="post-container">
+    <!-- <div id="post-container">
    <div class="card-header">
     <img class="avatar" src="/img/whatsaap.jpeg" alt="User Avatar">
     <div class="user-info">
@@ -385,7 +383,7 @@ display: block;
     <i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>
   </div>
  </div> 
- 
+  -->
  
  <div id="posts"></div>
 
@@ -427,15 +425,7 @@ display: block;
 
 
   
-  // function loadPosts() {
-  //     const postsContainer = document.getElementById('post-container');
-  //     const posts = JSON.parse(localStorage.getItem('posts')) || [];
-  //     posts.reverse();
-  //     posts.forEach(post => {
-  //       const postElement = renderPost(post);
-  //       postsContainer.insertAdjacentHTML('beforeend', postElement);
-  //     });
-  // }
+  
   
 
   function loadPosts() {
@@ -578,27 +568,7 @@ async function updateLikeCount(postId, userId, newType, oldType = null) {
       transaction.set(userLikeRef, { type: newType });
     });
   }
-//   async function incrementLikeCount(postId, userId, newType) {
-//   const postRef = doc(db, 'posts', postId);
-//   const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
 
-//   const postDoc = await getDoc(postRef);
-//   const userLikeDoc = await getDoc(userLikeRef);
-
-//   if (postDoc.exists()) {
-//     const userLikeData = userLikeDoc.data();
-//     const oldType = userLikeData ? userLikeData.type : null;
-
-//     if (newType !== oldType) {
-//       await updateLikeCount(postId, userId, newType, oldType);
-//       updateLikeCountUI(postId, newType, oldType);
-//     } else {
-//       console.log("User has already liked this post with the same type.");
-//     }
-//   } else {
-//     console.log("Post does not exist.");
-//   }
-// }
 
 async function incrementLikeCount(postId, userId, newType) {
     const postRef = doc(db, 'posts', postId);
@@ -614,20 +584,20 @@ async function incrementLikeCount(postId, userId, newType) {
         const likes = postData.likes || {};
         const userLikes = postData.userLikes || {};
 
-        // Check if the user has already liked the post with a different type
+     
         if (userLikes[userId] !== newType) {
-            // Update like counts
+          
             if (userLikes[userId]) {
-                // If the user has already liked with a different type, decrement that type's count
+                
                 likes[userLikes[userId]] = (likes[userLikes[userId]] || 0) - 1;
             }
-            // Increment the new like type count
+         
             likes[newType] = (likes[newType] || 0) + 1;
 
             // Update user likes
             userLikes[userId] = newType;
 
-            // Update the post document
+           
             transaction.update(postRef, {
                 likes: likes,
                 userLikes: userLikes,
