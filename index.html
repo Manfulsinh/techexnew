@@ -140,11 +140,12 @@
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.accessToken;
                     const user = result.user;
-
+                    console.log("user",result.user,result)
                     console.log("User Logged in");
                     localStorage.setItem("Name", user.displayName);
                     localStorage.setItem("emailID", user.email);
                     localStorage.setItem("photoURL", user.photoURL);
+                    localStorage.setItem("user",user.uid)
                     alert("User Login: " + user.displayName);
                     window.location.href = 'chat.html';
                 }).catch((error) => {
@@ -159,7 +160,7 @@
             signInWithPopup(auth, facebookProvider)
                 .then((result) => {
 
-                    const user = result.user;
+  
                     alert("User Logged in: " + user.displayName);
                     console.log("User Logged in");
                     localStorage.setItem("Name", user.displayName);

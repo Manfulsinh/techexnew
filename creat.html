@@ -314,35 +314,7 @@ function getPosts() {
   return posts ? JSON.parse(posts) : [];
 }
 
-// function handlePost() {
-//   const postText = document.getElementById('post-text').value;
-//   const fileInput = document.getElementById('post-image');
-//   const file = fileInput.files[0];
-  
-//   const postsArray = getPosts();
 
-//   if (file) {
-//     function readFileAsBase64(file) {
-//   return new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.onload = () => resolve(reader.result);
-//     reader.onerror = error => reject(error);
-//     reader.readAsDataURL(file);
-//   });
-// }
-//   } else {
-//     const postObject = createPostObject(postText, null);
-//     postsArray.push(postObject);
-//     savePosts(postsArray);
-    
-  
-//     document.getElementById('post-text').value = '';
-//   }
-// }
-
-
-
-// ...
 async function handlePost() {
   const postTextElement = document.getElementById('post-text');
   const postText = postTextElement.value;
@@ -378,7 +350,7 @@ async function handlePost() {
 
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
   import {getFirestore,collection,addDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
-
+   import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
@@ -394,7 +366,20 @@ async function handlePost() {
 
   const app = initializeApp(firebaseConfig);
 
+  const auth = getAuth(app);
 
+
+let currentUserUID = null;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+
+    currentUserUID = user.uid;
+ 
+  } else {
+  
+    currentUserUID = null;
+  }
+});
   const db = getFirestore(app);
   const username= localStorage.getItem('Name')
 const userprofile = localStorage.getItem('photoURL')
@@ -403,6 +388,7 @@ function createPostObject(postText, base64Image) {
     text: postText,
     image: base64Image,
     timestamp: new Date(),
+    uid: localStorage.getItem("user"), 
     username: username,
       userprofile: userprofile,
   };

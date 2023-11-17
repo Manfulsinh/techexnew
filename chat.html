@@ -1,13 +1,12 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="./../js/chat.style.css">
+  <link rel="stylesheet" href="./../js/chat.style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -15,344 +14,346 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   <script src="https://apis.google.com/js/api:client.js"></script>
-    <title>Document</title>
+  <title>Document</title>
 </head>
+
 <body>
 
 
   <style>
+    .popover-content {
+      display: none;
+      /* rest of your styles for popover content */
+    }
 
-
-.popover-content {
-  display: none;
-  /* rest of your styles for popover content */
-}
-
-.popover-content.show {
-  display: block;
-}
+    .popover-content.show {
+      display: block;
+    }
 
 
 
-.card-body .post-image {
-  display: block;      
-  margin-left: auto;    
-  margin-right: auto;  
-  max-width: 80%;      
-  height: auto;       
-}
+    .card-body .post-image {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 80%;
+      height: auto;
+    }
 
 
 
 
-h1.text-center.teah {
-  font-size: 41px;
-  font-weight: 700;
-  display: flex;
-  color: #343a40;
-}
+    h1.text-center.teah {
+      font-size: 41px;
+      font-weight: 700;
+      display: flex;
+      color: #343a40;
+    }
 
-.spne {
-margin-top: -19px;
-font-size: 29px;
-color: blue;
-font-weight: 700;
-margin-left: 78px;
+    .spne {
+      margin-top: -19px;
+      font-size: 29px;
+      color: blue;
+      font-weight: 700;
+      margin-left: 78px;
 
-}
+    }
 
-.post-section {
+    .post-section {
 
-padding: 10px;
+      padding: 10px;
 
-}
+    }
 
-#post-form {
-margin-bottom: 10px;
-}
+    #post-form {
+      margin-bottom: 10px;
+    }
 
-#post-content {
-width: 100%;
+    #post-content {
+      width: 100%;
 
-text-align: center;
-border: 1px solid blue;
-padding: 5px;
-border-radius: 3px;
-}
+      text-align: center;
+      border: 1px solid blue;
+      padding: 5px;
+      border-radius: 3px;
+    }
 
-/*  first pages and */
+    /*  first pages and */
 
 
-/* button#post-button {
+    /* button#post-button {
 
   width: 40%;
 } */
 
 
-button.btn.btn-secondary {
-  width: 60%;
-  margin: 7px;
-  padding: 12px;
-  text-align: center;
-  background-color: #007bff;
-  border-radius: 10px;
-  font-size: 15px;
-}
+    button.btn.btn-secondary {
+      width: 60%;
+      margin: 7px;
+      padding: 12px;
+      text-align: center;
+      background-color: #007bff;
+      border-radius: 10px;
+      font-size: 15px;
+    }
 
 
-.post-btn {
-  align-items: center;
-  text-align: center;
+    .post-btn {
+      align-items: center;
+      text-align: center;
 
-}
-.card-3 {
-width: auto;
-margin: 0 auto;
-background-color: #fff;
+    }
 
-}
+    .card-3 {
+      width: auto;
+      margin: 0 auto;
+      background-color: #fff;
 
-
-
-
-
-.card-header {
-display: flex;
-align-items: center;
-
-padding: 10px;
-}
-.user-name {
-  color: #212529;
-  font-size: 20px;
-  font-weight: normal;
-}
-.avatar {
-width: 50px;
-height: 50px;
-border-radius: 50%;
-}
-
-.user-info {
-margin-left: 10px;
-}
-
-.timestamp {
-font-size: 12px;
-color: #888;
-}
-
-.nice-icon {
-  margin-left: auto;
-  cursor: pointer;
-  font-size: 25px;
-  color: blue;
-}
+    }
 
 
 
 
 
-.card-body {
+    .card-header {
+      display: flex;
+      align-items: center;
 
-padding: 10px;
+      padding: 10px;
+    }
 
-}
+    .user-name {
+      color: #212529;
+      font-size: 20px;
+      font-weight: normal;
+    }
 
-.card-body .tweet-text {
-  font-size: 17px;
-  color: #333;
-  line-height: 1.5;
-  font-weight: 600;
-} 
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
 
+    .user-info {
+      margin-left: 10px;
+    }
 
-span.toipc {
-  color: blue;
-}
+    .timestamp {
+      font-size: 12px;
+      color: #888;
+    }
 
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border-top: 1px solid #212529;
-  border-bottom: 1px solid #212529;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  margin-top: 30px;
-}
-
-i.fa-regular.fa-heart {
-  position: relative;
-  font-size: 2em;
-  color: #828a90;
-  transition: color 0.2s ease-in-out; 
-  opacity: 0.7;
-}
-
-i.fa-regular.fa-face-smile {
-  position: relative;
-  border-right: 1px solid black;
-  border-left: 1px solid black;
-  padding-left: 50px;
-  padding-right: 50px;
-  font-size: 2em;
-  color: #0e84dd;
-  transition: color 0.2s ease-in-out;
-  opacity: 0.7;
-}
-
-i.fa-solid.fa-thumbs-up {
-  position: relative;
-  opacity: 0.7;
-  font-size: 2em;
-  color: #0e84dd;
-  transition: color 0.2s ease-in-out; /
-}
-
-
-i.fa-regular.fa-heart:hover {
-color: blue;
-}
-
-i.fa-regular.fa-face-smile:hover {
-color: #828a90;
-}
-
-i.fa-solid.fa-thumbs-up:hover {
-  color: blue; 
-}
-
-i.fa-regular.fa-heart:hover,
-i.fa-regular.fa-face-smile:hover,
-i.fa-solid.fa-thumbs-up:hover {
-  opacity: 1; 
-}
-.img-container {
-display: flex;
-
-justify-content: center;
-gap: 1px;
-margin-bottom: 20px;
-}
-
-.img-container img {
-max-width: 46%;
-height: auto;
-border-radius: 5px 4px 5px 4px;
-margin-top: 30px;
-} */
-
-
-
-.mobilebar-container {
-position: fixed;
-bottom: 0px;
-z-index: 12;
-left: 50%;
-transform: translateX(-50%);
-border: 1px solid blue;
-}
-
-.mobilebar-tab {
-
-background-color: #fff;
-
-
-
-display: flex;
-position:fixed;
-flex-shrink: 0;
-bottom: 0px;
-}
-
-.mobilebar-tab-item {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-width: 100%;     
-flex-shrink: 0;
-cursor: pointer;
-transition: 0.3s;
-position: relative;
-z-index: 2;
-}
-
-.mobilebar-tab-item.active {
-width: 105px;
-
-
-}
-
-
-
-.mobilebar-tab__icon {
-display: block;
-color: #051367;
-transition-duration: 0.3s;
-line-height: 1;
-}
+    .nice-icon {
+      margin-left: auto;
+      cursor: pointer;
+      font-size: 25px;
+      color: blue;
+    }
 
 
 
 
-.popover-content {
-  display: none;
-}
-.popover-content.show {
-  display: block;
-}
+
+    .card-body {
+
+      padding: 10px;
+
+    }
+
+    .card-body .tweet-text {
+      font-size: 17px;
+      color: #333;
+      line-height: 1.5;
+      font-weight: 600;
+    }
 
 
-.show-popover {
-display: block;
-}
+    span.toipc {
+      color: blue;
+    }
 
 
-.popover-action-btn {
-  display: block;
-  width: 35%;
-  padding: 6px 16px;
-  margin: 6px 0;
-  color: #373b3e;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: auto;
-  margin-top: -3px;
-  font-weight: 700;
-  font-size: 13px;
-}
- </style>
- 
-<div class="allchat">
-  <div class="chat-home">
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border-top: 1px solid #212529;
+      border-bottom: 1px solid #212529;
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+      margin-top: 30px;
+    }
+
+    i.fa-regular.fa-heart {
+      position: relative;
+      font-size: 2em;
+      color: #828a90;
+      transition: color 0.2s ease-in-out;
+      opacity: 0.7;
+    }
+
+    i.fa-regular.fa-face-smile {
+      position: relative;
+      border-right: 1px solid black;
+      border-left: 1px solid black;
+      padding-left: 50px;
+      padding-right: 50px;
+      font-size: 2em;
+      color: #0e84dd;
+      transition: color 0.2s ease-in-out;
+      opacity: 0.7;
+    }
+
+    i.fa-solid.fa-thumbs-up {
+      position: relative;
+      opacity: 0.7;
+      font-size: 2em;
+      color: #0e84dd;
+      transition: color 0.2s ease-in-out;/
+    }
+
+
+    i.fa-regular.fa-heart:hover {
+      color: blue;
+    }
+
+    i.fa-regular.fa-face-smile:hover {
+      color: #828a90;
+    }
+
+    i.fa-solid.fa-thumbs-up:hover {
+      color: blue;
+    }
+
+    i.fa-regular.fa-heart:hover,
+    i.fa-regular.fa-face-smile:hover,
+    i.fa-solid.fa-thumbs-up:hover {
+      opacity: 1;
+    }
+
+    .img-container {
+      display: flex;
+
+      justify-content: center;
+      gap: 1px;
+      margin-bottom: 20px;
+    }
+
+    .img-container img {
+      max-width: 46%;
+      height: auto;
+      border-radius: 5px 4px 5px 4px;
+      margin-top: 30px;
+    }
+
+    */ .mobilebar-container {
+      position: fixed;
+      bottom: 0px;
+      z-index: 12;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 1px solid blue;
+    }
+
+    .mobilebar-tab {
+
+      background-color: #fff;
+
+
+
+      display: flex;
+      position: fixed;
+      flex-shrink: 0;
+      bottom: 0px;
+    }
+
+    .mobilebar-tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      z-index: 2;
+    }
+
+    .mobilebar-tab-item.active {
+      width: 105px;
+
+
+    }
+
+
+
+    .mobilebar-tab__icon {
+      display: block;
+      color: #051367;
+      transition-duration: 0.3s;
+      line-height: 1;
+    }
+
+
+
+
+    .popover-content {
+      display: none;
+    }
+
+    .popover-content.show {
+      display: block;
+    }
+
+
+    .show-popover {
+      display: block;
+    }
+
+
+    .popover-action-btn {
+      display: block;
+      width: 35%;
+      padding: 6px 16px;
+      margin: 6px 0;
+      color: #373b3e;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: auto;
+      margin-top: -3px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+  </style>
+
+  <div class="allchat">
+    <div class="chat-home">
       <div class="container">
-          <div class="row">
-              <div class="col-sm-12">
-                   <h1 class="text-center teah">Tech</h1>
-                  <div class="spne">
-                      <span>X</span>
-                  </div> 
+        <div class="row">
+          <div class="col-sm-12">
+            <h1 class="text-center teah">Tech</h1>
+            <div class="spne">
+              <span>X</span>
+            </div>
 
-                
-                  <div class="post-section">
-                      <div class="post-btn">
-                          <a href="./creat.html"><button id="post-button" class="btn btn-secondary">Create Post</button></a>
-                      </div>
-                  </div>
+
+            <div class="post-section">
+              <div class="post-btn">
+                <a href="./creat.html"><button id="post-button" class="btn btn-secondary">Create Post</button></a>
               </div>
+            </div>
           </div>
+        </div>
       </div>
-  </div>
+    </div>
 
 
 
- <div class="card-3">
-    <!-- <div id="post-container">
+    <div class="card-3">
+      <!-- <div id="post-container">
    <div class="card-header">
     <img class="avatar" src="/img/whatsaap.jpeg" alt="User Avatar">
     <div class="user-info">
@@ -384,91 +385,90 @@ display: block;
   </div>
  </div> 
   -->
- 
- <div id="posts"></div>
 
-    </div> 
- 
- 
+      <div id="posts"></div>
 
-<div class="mobilebar-container mobile-layout">
-    <nav class="mobilebar-tab">
+    </div>
+
+
+
+    <div class="mobilebar-container mobile-layout">
+      <nav class="mobilebar-tab">
         <div id="applicationBarMobileButton1" class="mobilebar-tab-item active">
-            <span class="mobilebar-tab__icon">
-                <a href="./chat.html"> <i class="fa-solid fa-house"></i></a>
-            </span>
+          <span class="mobilebar-tab__icon">
+            <a href="./chat.html"> <i class="fa-solid fa-house"></i></a>
+          </span>
         </div>
         <div class="mobilebar-tab-item">
-            <span class="mobilebar-tab__icon">
-                <a href="./profile.html"><i class="fa-solid fa-user"></i></a>
-            </span>
+          <span class="mobilebar-tab__icon">
+            <a href="./profile.html"><i class="fa-solid fa-user"></i></a>
+          </span>
         </div>
-    </nav>
-</div>
+      </nav>
+    </div>
 
 
 
 
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
 
 
 
 
-   
-<script>
+
+    <script>
 
 
 
-  
-  
-  
-
-  function loadPosts() {
-  const postsContainer = document.getElementById('post-container');
-  const posts = JSON.parse(localStorage.getItem('posts')) || [];
-  
-  // Reverse the array here
-  posts.reverse();
-
-  posts.forEach(post => {
-    const postElement = renderPost(post);
-    postsContainer.insertAdjacentHTML('beforeend', postElement);
-  });
-}
 
 
 
-  document.addEventListener('DOMContentLoaded', loadPosts);
-  
 
-  document.addEventListener('click', function(event) {
-      if (event.target.classList.contains('popoverIcon')) {
+      function loadPosts() {
+        const postsContainer = document.getElementById('post-container');
+        const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+        posts.reverse();
+
+        posts.forEach(post => {
+          const postElement = renderPost(post);
+          postsContainer.insertAdjacentHTML('beforeend', postElement);
+        });
+      }
+
+
+
+      document.addEventListener('DOMContentLoaded', loadPosts);
+
+
+      document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('popoverIcon')) {
 
           const popoverContent = event.target.closest('.card-header').nextElementSibling;
           if (popoverContent) {
-              popoverContent.classList.toggle('show');
+            popoverContent.classList.toggle('show');
           } else {
-                console.error('Popover content not found for icon: ', event.target);
-          
+            console.error('Popover content not found for icon: ', event.target);
+
           }
+        }
+      });
+
+
+      function editPost(postId) {
+
+        window.location.href = `edit.html?postId=${postId}`;
       }
-  });
-
-
-  function editPost(postId) {
- 
- window.location.href = `edit.html?postId=${postId}`;
-}
 
 
 
 
- </script>
+    </script>
 
 
 
@@ -476,24 +476,26 @@ display: block;
 
 
 
-  
-   <script type="module">
 
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-    import {
-      getFirestore,
-    collection,
-    getDocs,
-    deleteDoc,
-    doc,
-    updateDoc,
-    getDoc,
-    runTransaction,
-    onSnapshot
-    } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
-    
-    
-    const firebaseConfig = {
+    <script type="module">
+
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        deleteDoc,
+        doc,
+        updateDoc,
+        getDoc,
+        runTransaction,
+        onSnapshot
+      } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+      import { getAuth } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+
+
+      const firebaseConfig = {
         apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
         authDomain: "fir-b6449.firebaseapp.com",
         projectId: "fir-b6449",
@@ -503,185 +505,183 @@ display: block;
         measurementId: "G-2TM34PV1YN"
       };
       const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-  
-  
-  
-    function cssEscape(str) {
-   
-    if (/^\d/.test(str)) {
-      str = '_' + str;
-    }
-  
-    return String(str).replace(/([!#$%&()*+,./:;<=>?@[\]^`{|}~])/g, '\\$1').replace(/:/g, '\\:');
-  }
-    
+      const db = getFirestore(app);
+      const auth = getAuth(app);  
 
 
+      function cssEscape(str) {
 
+        if (/^\d/.test(str)) {
+          str = '_' + str;
+        }
 
-  function updateLikeCountUI(postId, newType, oldType) {
-  const postElement = document.getElementById(postId); // Assuming postId is the HTML id of the post
+        return String(str).replace(/([!#$%&()*+,./:;<=>?@[\]^`{|}~])/g, '\\$1').replace(/:/g, '\\:');
+      }
+
+      function updateLikeCountUI(postId, newType) {
+  const postElement = document.getElementById(postId); 
   if (postElement) {
-    const newTypeCountElement = postElement.querySelector(`.like-count[data-type="${newType}"]`);
-    let newTypeCount = parseInt(newTypeCountElement.textContent);
-    newTypeCountElement.textContent = newTypeCount + 1;
-
-    if (oldType) {
-      const oldTypeCountElement = postElement.querySelector(`.like-count[data-type="${oldType}"]`);
-      let oldTypeCount = parseInt(oldTypeCountElement.textContent);
-      oldTypeCountElement.textContent = oldTypeCount - 1;
-    }
+    const likeCountElements = postElement.querySelectorAll('.like-count');
+    likeCountElements.forEach(el => {
+      const type = el.getAttribute('data-type');
+      let likeCount = parseInt(el.textContent);
+      if (type === newType) {
+        likeCount++;
+      }
+      el.textContent = likeCount;
+    });
   }
 }
 
-async function updateLikeCount(postId, userId, newType, oldType = null) {
-    const postRef = doc(db, 'posts', postId);
-    const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
 
-    await runTransaction(db, async (transaction) => {
-      const postDoc = await transaction.get(postRef);
-      if (!postDoc.exists()) {
-        throw new Error("Document does not exist!");
+      async function updateLikeCount(postId, userId, newType, oldType = null) {
+        const postRef = doc(db, 'posts', postId);
+        const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+
+        await runTransaction(db, async (transaction) => {
+          const postDoc = await transaction.get(postRef);
+          if (!postDoc.exists()) {
+            throw new Error("Document does not exist!");
+          }
+
+          const postData = postDoc.data();
+          const likes = postData.likes || {};
+          const updatedLikes = { ...likes };
+
+
+          if (oldType) {
+            updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+          }
+          updatedLikes[newType] = (likes[newType] || 0) + 1;
+
+          let totalLikes = postData.totalLikes || 0;
+          if (oldType !== newType) {
+            totalLikes += (oldType ? 0 : 1) - (likes[oldType] === 1 ? 1 : 0);
+          }
+
+          transaction.update(postRef, {
+            likes: updatedLikes,
+            totalLikes: totalLikes,
+            latestLikeTimestamp: Date.now()
+          });
+          transaction.set(userLikeRef, { type: newType });
+        });
       }
-
-      const postData = postDoc.data();
-      const likes = postData.likes || {};
-      const updatedLikes = { ...likes };
-
-    
-      if (oldType) {
-        updatedLikes[oldType] = (likes[oldType] || 0) - 1;
-      }
-      updatedLikes[newType] = (likes[newType] || 0) + 1;
-
-      let totalLikes = postData.totalLikes || 0;
-      if (oldType !== newType) {
-        totalLikes += (oldType ? 0 : 1) - (likes[oldType] === 1 ? 1 : 0);
-      }
-
-      transaction.update(postRef, { 
-        likes: updatedLikes,
-        totalLikes: totalLikes, 
-        latestLikeTimestamp: Date.now() 
-      });
-      transaction.set(userLikeRef, { type: newType });
-    });
-  }
 
 
 async function incrementLikeCount(postId, userId, newType) {
-    const postRef = doc(db, 'posts', postId);
-    const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+  const postRef = doc(db, 'posts', postId);
+  const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
 
-    await runTransaction(db, async (transaction) => {
-        const postDoc = await transaction.get(postRef);
-        if (!postDoc.exists()) {
-            throw new Error("Document does not exist!");
-        }
+  await runTransaction(db, async (transaction) => {
+    const userLikeDoc = await transaction.get(userLikeRef);
+    const postDoc = await transaction.get(postRef);
+    if (!postDoc.exists()) {
+      throw new Error("Post does not exist!");
+    }
 
-        const postData = postDoc.data();
-        const likes = postData.likes || {};
-        const userLikes = postData.userLikes || {};
+    let oldType = null;
+    if (userLikeDoc.exists()) {
+      oldType = userLikeDoc.data().type;
+    }
 
-     
-        if (userLikes[userId] !== newType) {
-          
-            if (userLikes[userId]) {
-                
-                likes[userLikes[userId]] = (likes[userLikes[userId]] || 0) - 1;
-            }
-         
-            likes[newType] = (likes[newType] || 0) + 1;
+    const postData = postDoc.data();
+    const likes = postData.likes || {};
+    const updatedLikes = { ...likes };
 
-            // Update user likes
-            userLikes[userId] = newType;
+    if (oldType) {
+      updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+    }
+    updatedLikes[newType] = (likes[newType] || 0) + 1;
 
-           
-            transaction.update(postRef, {
-                likes: likes,
-                userLikes: userLikes,
-                totalLikes: Object.values(likes).reduce((a, b) => a + b, 0), // Sum of all likes
-                latestLikeTimestamp: Date.now()
-            });
-        }
-    }).then(() => {
-        console.log("Transaction successfully committed!");
-    }).catch((error) => {
-        console.log("Transaction failed: ", error);
+    let totalLikes = postData.totalLikes || 0;
+    if (oldType !== newType) {
+      totalLikes += (oldType ? 0 : 1) - (likes[oldType] === 1 ? 1 : 0);
+    }
+
+    transaction.update(postRef, {
+      likes: updatedLikes,
+      totalLikes: totalLikes,
+      latestLikeTimestamp: Date.now()
     });
+    transaction.set(userLikeRef, { type: newType });
+  }).then(() => {
+    updateLikeCountUI(postId, newType); 
+  }).catch((error) => {
+    console.error("Transaction failed: ", error);
+  });
 }
 
 async function getPostsRealTime() {
-    const postsCol = collection(db, 'posts');
-    onSnapshot(postsCol, (snapshot) => {
-      const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      renderPosts(postsList);
-    });
-  }
+  const postsCol = collection(db, 'posts');
+  onSnapshot(postsCol, (snapshot) => {
+    const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderPosts(postsList);
+  });
+}
+      async function getPosts() {
+        const postsCol = collection(db, 'posts');
+        try {
+          const postsSnapshot = await getDocs(postsCol);
+          const postsList = postsSnapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+          });
 
- async function getPosts() {
-      const postsCol = collection(db, 'posts'); 
-      try {
-        const postsSnapshot = await getDocs(postsCol);
-        const postsList = postsSnapshot.docs.map(doc => {
-          return { id: doc.id, ...doc.data() }; 
-        });
-       
-        renderPosts(postsList);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
+          renderPosts(postsList);
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        }
       }
-    }
-    
-    
-    
-    
-    window.deletePost = async function(postId) {
-      if (!postId) {
-        console.error('No Post ID provided for deletion.');
-        return;
-      }
-    
-      const postRef = doc(db, 'posts', postId); 
-    
-      try {
-        await deleteDoc(postRef); 
-       
-        getPosts(); 
-      } catch (error) {
-        console.error("Error deleting post:", error);
-      }
-    };
-    
-    
-    
+
    
+
+
+      window.deletePost = async function (postId) {
+        if (!postId) {
+          console.error('No Post ID provided for deletion.');
+          return;
+        }
+
+        const postRef = doc(db, 'posts', postId);
+
+        try {
+          await deleteDoc(postRef);
+
+          getPosts();
+        } catch (error) {
+          console.error("Error deleting post:", error);
+        }
+      };
+
+
+
+
+
+      function renderPosts(posts) {
     
-    function renderPosts(posts) {
-  
-      
-    const postsElement = document.getElementById('posts');
-    if (!postsElement) {
-      console.error('No element with id "posts" found.');
-      return;
-    }
-    posts.sort((a, b) => b.postObject.timestamp.seconds - a.postObject.timestamp.seconds);
-    posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
-    postsElement.innerHTML = '';
-    
+
+        const postsElement = document.getElementById('posts');
+        if (!postsElement) {
+          console.error('No element with id "posts" found.');
+          return;
+        }
+        posts.sort((a, b) => b.postObject.timestamp.seconds - a.postObject.timestamp.seconds);
+        posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
+        postsElement.innerHTML = ''; // C
+
+        posts.forEach(post => {
+          const card = document.createElement('div');
+          card.className = 'card mb-3';
+          const postIdPrefix = /^\d/.test(post.id) ? '_' : '';
+          const sanitizedPostId = cssEscape(postIdPrefix + post.id);
+          card.setAttribute('id', sanitizedPostId);
+
+          let dateTime = new Date(post.postObject.timestamp.seconds * 1000);
+
+          const isCreator = auth.currentUser && auth.currentUser.uid === post.postObject.uid;
+
+          card.innerHTML = `
    
-    posts.forEach(post => {
-        const postIdPrefix = /^\d/.test(post.id) ? '_' : '';
-        const sanitizedPostId = cssEscape(postIdPrefix + post.id);
-        const card = document.createElement('div');
-        card.className = 'card mb-3';
-        card.setAttribute('id', sanitizedPostId);
-        
-    
-        let dateTime = new Date(post.postObject.timestamp.seconds * 1000);
-    
-        card.innerHTML = `
           <div class="card-header">
             <img class="avatar" src="${post.postObject.userprofile}" alt="User Avatar">
             <div class="user-info">
@@ -690,11 +690,12 @@ async function getPostsRealTime() {
             </div>
             <i class="fas fa-ellipsis-h nice-icon ml-auto popoverIcon"></i> 
           </div>
+          ${isCreator ? `
           <div class="popover-content">
             <button class="popover-action-btn" data-post-id="${post.id}" onclick="editPost('${post.id}')">Edit Post</button>
-           <button class="popover-action-btn" data-post-id="${post.id}" onclick="deletePost('${post.id}')">Delete Post</button>
-    
+            <button class="popover-action-btn" data-post-id="${post.id}" onclick="deletePost('${post.id}')">Delete Post</button>
           </div>
+        ` : ''}
           <div class="card-body">
             <p class="tweet-text">${post.postObject.text}</p>
             ${post.postObject.image ? `<img src="${post.postObject.image}" class="post-image" alt="Post Image">` : ''}
@@ -705,40 +706,58 @@ async function getPostsRealTime() {
     <i class="fa-solid fa-thumbs-up like-icon" data-type="thumbs-up" aria-hidden="true"></i><span class="like-count" data-type="thumbs-up">${post.likes?.['thumbs-up'] || 0}</span>
   </div>
         `;
-    
-  
-  
-  
-        const heartIcon = card.querySelector('[data-type="heart"]');
-      const smileIcon = card.querySelector('[data-type="smile"]');
-      const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
-
-      heartIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'heart'));
-      smileIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'smile'));
-      thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'thumbs-up'));
-
-      postsElement.appendChild(card);
-    });
-    }
-   
 
 
 
 
+        
+
+          const heartIcon = card.querySelector('[data-type="heart"]');
+          const smileIcon = card.querySelector('[data-type="smile"]');
+          const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
+
+          heartIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'heart'));
+          smileIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'smile'));
+          thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'thumbs-up'));
+
+          postsElement.appendChild(card);
+          attachEventListenersToCard(card, post);
+
+          function attachEventListenersToCard(card, post) {
+            const popoverIcon = card.querySelector('.popoverIcon');
+            if (popoverIcon) {
+           
+
+              popoverIcon.addEventListener('click', () => {
+
+       
+                if (auth.currentUser) {
+                  const currentUserID = auth.currentUser.uid;
+             
+                  if (localStorage.getItem("user") === post.postObject.uid) {
+                    const popoverContent = card.querySelector('.popover-content');
+                popoverContent.style.display = popoverContent.style.display === 'block' ? 'none' : 'block';
+                  }
+                }
+
+              });
+            }
 
 
+          }
 
 
-    getPostsRealTime();
-  
-    </script> 
+        });
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        getPostsRealTime();
 
-
-
-
+      });
+    </script>
 
 
 
 
 </body>
+
 </html>
