@@ -146,9 +146,9 @@
                     localStorage.setItem("emailID", user.email);
                     localStorage.setItem("photoURL", user.photoURL);
                     localStorage.setItem("user",user.uid)
-                    alert("User Login: " + user.displayName);
-                    window.location.href = 'chat.html';
-                }).catch((error) => {
+                     window.location.href = 'chat.html';
+                })
+                .catch((error) => {
 
                     const errorCode = error.code;
                     const errorMessage = error.message;
@@ -156,26 +156,7 @@
                 });
         });
 
-        document.getElementById('flogin').addEventListener('click', (e) => {
-            signInWithPopup(auth, facebookProvider)
-                .then((result) => {
-
-  
-                    alert("User Logged in: " + user.displayName);
-                    console.log("User Logged in");
-                    localStorage.setItem("Name", user.displayName);
-                    localStorage.setItem("emailID", user.email);
-                    localStorage.setItem("photoURL", user.photoURL);
-                    window.location.href = 'chat.html';
-                }).catch((error) => {
-
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(errorMessage);
-                    console.error(error);
-                });
-        });
-
+   
     </script>
 </body>
 </html>
