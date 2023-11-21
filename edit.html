@@ -34,7 +34,7 @@
    i.fa-solid.fa-xmark {
        font-size: 24px;
        font-weight: 800;
-       margin-right: 7px;
+      
    }
    .fa-xmark:hover {
     
@@ -72,31 +72,36 @@
 .edit {
     border: 2px solid #0d6efd;
     border-radius: 7px;
+   padding-top: 10px;
  
-    padding-top: 10px;
-    margin-top: 300px;
 }
 .media {
-    margin-top: 56px;
-    margin-left: -62px;
+  
     font-size: 22px;
     font-weight: 700;
     color: #495057;
    
 }
 .icon {
-    margin-top: 25px;
+    /* margin-top: 25px;
     margin-left: 34px;
-    font-size: 24px;
+    font-size: 24px; */
     color: red;
-  font-weight: 700;
+  /* font-weight: 700; */
 }
 
    img.im-2 {
-    width: 45%;
-    justify-content: center;
-    border-radius: 15px;
-   margin: 10px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+
+
+.edit {
+    border: 2px solid #0d6efd;
+    border-radius: 7px;
+    padding-top: 10px;
 }
 
 .edit-3 {
@@ -174,8 +179,8 @@ span {
 }
 
 button.btn.btn-primary-3 {
-  background-color: #fff;
-    color: #0e84dd;
+  background-color: #0e84dd;
+  color: #fff;
     border: 1px solid rgb(136, 189, 236);
     font-weight: 700;width: 95%;
     font-size: 18px;
@@ -188,8 +193,10 @@ button.btn.btn-primary-3 {
 
 
 button.btn.btn-primary-3:hover {
-  background-color: #0e84dd;
-  color: #fff;
+
+
+  background-color: #fff;
+    color: #0e84dd;
 }
 
 
@@ -238,7 +245,7 @@ button.btn.btn-dange-3 {
       </li>
      
     </ul>
-    <i class="fa-solid fa-xmark" id="xmark-icon"></i>
+    <i class="fa-solid fa-xmark" id="xmark-icon" style="color: #007bff;"></i>
 
 
     
@@ -255,20 +262,20 @@ button.btn.btn-dange-3 {
 
  <div class="container">
         <div class="edit">
-      <div class="row">
+      <div class="row m-0">
       <div class="col-sm-12">
         <div class="row">
     
-      <div class="col-sm-6 col-6">
+      <div class="col-sm-6 col-4">
           <img src="./img/3.jpg" class="im-2" id="preview-image">
              </div>
-    <div class="col-sm-3 col-3">
-       <h6 class="media" id="preview-title">Media 1</h6>
+    <div class="col-sm-3 col-4"style="display: flex;align-items: center;justify-content: center; white-space: nowrap;">
+       <h6 class="media" id="preview-title" style="margin: 0;">Media 1</h6>
         </div>
           
 
-    <div class="col-sm-3 col-3">
-        <i class="fa-solid fa-xmark icon" id="reset-icon" style="margin-top: 51px;"></i>
+    <div class="col-sm-3 col-4" style="display: flex; justify-content: end; align-items: center;">
+        <i class="fa-solid fa-xmark icon" id="reset-icon" style="margin-top: 0px;"></i>
       </div>
 </div>
   </div>
