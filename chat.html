@@ -567,9 +567,11 @@
           transaction.set(userLikeRef, { type: newType });
         });
       }
-      async function incrementLikeCount(postId, userId, newType) {
+
+
+async function incrementLikeCount(postId, userEmail, newType) {
   const postRef = doc(db, 'posts', postId);
-  const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+  const userLikeRef = doc(db, 'posts', postId, 'likes', userEmail);
 
   await runTransaction(db, async (transaction) => {
     const userLikeDoc = await transaction.get(userLikeRef);
@@ -579,54 +581,77 @@
       throw new Error("Post does not exist!");
     }
 
-    const postData = postDoc.data();
-    const likes = postData.likes || {};
-    let totalLikes = postData.totalLikes || 0;
-
     let oldType = null;
+    let postData = postDoc.data();
+    
+   
+    const likes = postData.likes || {};
+    let updatedLikes = { ...likes };
+
     if (userLikeDoc.exists()) {
       oldType = userLikeDoc.data().type;
+
       if (oldType === newType) {
-        // User clicked the same like type again, decrement like
-        totalLikes -= 1;
-        likes[oldType] = (likes[oldType] || 0) - 1;
-        transaction.delete(userLikeRef); // Remove the user's like
-      } else {
-        // User changed the like type
-        likes[oldType] = (likes[oldType] || 0) - 1;
-        likes[newType] = (likes[newType] || 0) + 1;
-        transaction.set(userLikeRef, { type: newType }); // Update the user's like
+       
+        updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+
+        let totalLikes = postData.totalLikes || 0;
+        totalLikes -= likes[oldType] === 1 ? 1 : 0;
+
+        transaction.update(postRef, {
+          likes: updatedLikes,
+          totalLikes: totalLikes,
+          latestLikeTimestamp: Date.now()
+        });
+
+       
+        transaction.delete(userLikeRef);
+        return;
       }
-    } else {
-      // User is liking for the first time
-      totalLikes += 1;
-      likes[newType] = (likes[newType] || 0) + 1;
-      transaction.set(userLikeRef, { type: newType }); // Add the user's like
     }
 
-    // Update the post with new like counts
-    transaction.update(postRef, {
-      likes: likes,
-      totalLikes: totalLikes
+
+
+    if (oldType) {
+     
+      updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+    }
+
+
+    updatedLikes[newType] = (likes[newType] || 0) + 1;
+
+    let totalLikes = 0;
+
+ 
+    Object.values(updatedLikes).forEach(count => {
+      totalLikes += count;
     });
+
+    transaction.update(postRef, {
+      likes: updatedLikes,
+      totalLikes: totalLikes,
+      latestLikeTimestamp: Date.now()
+    });
+
+
+    if (!userLikeDoc.exists() || oldType !== newType) {
+      transaction.set(userLikeRef, { type: newType, userEmail: userEmail });
+    }
   }).then(() => {
-    updateLikeCountUI(postId, newType); // Update UI after transaction
+    updateLikeCountUI(postId, newType);
   }).catch((error) => {
     console.error("Transaction failed: ", error);
   });
 }
 
+
+
 async function getPostsRealTime() {
   const postsCol = collection(db, 'posts');
- 
-  //   const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  //   renderPosts(postsList);
-  // });
-  onSnapshot(collection(db, 'posts'), (snapshot) => {
-  const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  renderPosts(postsList);
-});
-
+  onSnapshot(postsCol, (snapshot) => {
+    const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderPosts(postsList);
+  });
 }
       async function getPosts() {
         const postsCol = collection(db, 'posts');
@@ -666,7 +691,6 @@ async function getPostsRealTime() {
 
 
 
-
       function renderPosts(posts) {
     
 
@@ -675,16 +699,8 @@ async function getPostsRealTime() {
           console.error('No element with id "posts" found.');
           return;
         }
-
-        posts.sort((a, b) => {
-  const likeDifference = (b.likes?.totalLikes || 0) - (a.likes?.totalLikes || 0);
-  if (likeDifference === 0) {
-    return b.postObject.timestamp.seconds - a.postObject.timestamp.seconds;
-  }
-  return likeDifference;
-});
-
-       
+        posts.sort((a, b) => b.postObject.timestamp.seconds - a.postObject.timestamp.seconds);
+        posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
         postsElement.innerHTML = ''; // C
 
         posts.forEach(post => {
@@ -729,14 +745,38 @@ async function getPostsRealTime() {
 
 
         
+        const heartIcon = card.querySelector('[data-type="heart"]');
+const smileIcon = card.querySelector('[data-type="smile"]');
+const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
 
-          const heartIcon = card.querySelector('[data-type="heart"]');
-          const smileIcon = card.querySelector('[data-type="smile"]');
-          const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
+heartIcon.addEventListener('click', () => {
+  if (auth.currentUser) {
+    incrementLikeCount(post.id, auth.currentUser.email, 'heart');
+  } else {
+    // Handle the case where the user is not authenticated
+    console.log("User is not authenticated.");
+  }
+});
 
-          heartIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'heart'));
-          smileIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'smile'));
-          thumbsUpIcon.addEventListener('click', () => incrementLikeCount(post.id, 'userId', 'thumbs-up'));
+smileIcon.addEventListener('click', () => {
+  if (auth.currentUser) {
+    incrementLikeCount(post.id, auth.currentUser.email, 'smile');
+  } else {
+    // Handle the case where the user is not authenticated
+    console.log("User is not authenticated.");
+  }
+});
+
+thumbsUpIcon.addEventListener('click', () => {
+  if (auth.currentUser) {
+    incrementLikeCount(post.id, auth.currentUser.email, 'thumbs-up');
+  } else {
+    // Handle the case where the user is not authenticated
+    console.log("User is not authenticated.");
+  }
+});
+
+
 
           postsElement.appendChild(card);
           attachEventListenersToCard(card, post);

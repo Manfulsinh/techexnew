@@ -22,7 +22,7 @@ img {
 .facebook {
   width: 100%;
   max-width: 300px;
-  padding: 15px;
+  padding: 7px;
   font-size: 1rem;
   margin: 10px;
   border-radius: 5px;
@@ -59,7 +59,7 @@ button#glogin {
 
   .facebook, #glogin {
       width: 100%;
-      max-width: none; /* To override the previous max-width */
+      max-width: none;
       padding: 10px;
   }
 
@@ -68,19 +68,19 @@ button#glogin {
       height: 1.5em;
   }
 
-  /* Add any additional mobile-specific styles here */
+
 }
 @media (min-width: 768px) and (max-width: 1024px) {
-  /* Adjust the container padding for tablets */
+
   .container {
       padding: 20px;
   }
 
-  /* Adjust button sizes and padding */
+
   .facebook, #glogin {
       padding: 12px;
       font-size: 1.2rem;
   }
 
-  /* Add any additional tablet-specific styles here */
+
 }

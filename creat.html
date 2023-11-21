@@ -245,7 +245,7 @@ height: auto;
         <div class="news-feed"></div>
     </div>
   
-      <div class="col-sm-6 mk-1">
+      <!-- <div class="col-sm-6 mk-1">
         <div class="card">
           <div class="card-body">
             <label for="post-image" id="image-label">
@@ -257,6 +257,21 @@ height: auto;
           </div>
         </div>
         
+      </div> -->
+
+
+      <div class="col-sm-6 mk-1">
+        <div class="card">
+          <div class="card-body">
+            <label for="camera-post-image" id="image-label">
+              <i class="fa-solid fa-camera" id="camera-icon"></i>
+              <div class="d-flex justify-content-center align-items-center mt-2">
+                <span>Camera</span>
+              </div>
+            </label>
+            <input type="file" id="camera-post-image" accept="image/*, video/*" style="display: none">
+          </div>
+        </div>
       </div>
       <div class="post-container">
          <button id="post-button"class="btn btn-secondary">Post</button>
@@ -345,7 +360,6 @@ async function handlePost() {
    </script>
 
 
-
 <script type="module">
 
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
@@ -408,12 +422,39 @@ async function savePostToFirestore(postObject) {
 }
 
 // Function to handle post button click
+// async function handlePost() {
+//   const postTextElement = document.getElementById('post-text');
+//   const postText = postTextElement.value;
+//   const fileInput = document.getElementById('post-image');
+//   const file = fileInput.files[0];
+//   console.log("posttext: ", postText);
+//   if (file) {
+//     try {
+//       const base64Image = await readFileAsBase64(file);
+//       const postObject = createPostObject(postText, base64Image);
+//       await savePostToFirestore(postObject);
+//     } catch (error) {
+//       console.error("Error reading file: ", error);
+//     }
+//   } else {
+//     const postObject = createPostObject(postText, null);
+//     await savePostToFirestore(postObject);
+//   }
+
+
+//   postTextElement.value = '';
+//   fileInput.value = '';
+// }
+// ...
+
+// Function to handle post button click
 async function handlePost() {
   const postTextElement = document.getElementById('post-text');
   const postText = postTextElement.value;
   const fileInput = document.getElementById('post-image');
   const file = fileInput.files[0];
   console.log("posttext: ", postText);
+  
   if (file) {
     try {
       const base64Image = await readFileAsBase64(file);
@@ -427,10 +468,14 @@ async function handlePost() {
     await savePostToFirestore(postObject);
   }
 
+  // Redirect to chat.html
+  window.location.href = 'chat.html';
 
   postTextElement.value = '';
   fileInput.value = '';
 }
+
+
 
 
 document.getElementById('post-button').addEventListener('click', handlePost);
