@@ -72,11 +72,9 @@ color: red;
 }
 
 img.im-2 {
-/* width: 45%;
-justify-content: center;
-border-radius: 15px;
-margin: 10px; */
-width: 100%;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
 }
 
 .edit-3 {
