@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/font-awesome.min.css">
     <link rel="stylesheet" href="././js/main.css">
 </head>
+
 <body>
     <style>
         /* html,
@@ -108,11 +109,15 @@
         </div>
     </div>
 
+
+
     <script type="module">
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-        // import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        // import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js";
+        import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-messaging.js';
+
 
         const firebaseConfig = {
             apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
@@ -127,7 +132,14 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-
+        const messaging = getMessaging(app, {
+            vapidKey: "BIiEhr1Ih_aBnxdf7j8klCi-jzv8pZQO3CcReoB4CGBizgmgSLbNpbN5U_L0oDmLoz7_XF1XvRX5v2iRyQVOw5I=",
+            serviceWorkerRegistration: {
+                url: 'firebase-messaging-sw.js' // Adjust the path based on your file location
+            },
+        });
+        console.log(messaging, "messaging")
+       
 
         const googleProvider = new GoogleAuthProvider();
         const facebookProvider = new FacebookAuthProvider();
@@ -140,13 +152,13 @@
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.accessToken;
                     const user = result.user;
-                    console.log("user",result.user,result)
+                    console.log("user", result.user, result)
                     console.log("User Logged in");
                     localStorage.setItem("Name", user.displayName);
                     localStorage.setItem("emailID", user.email);
                     localStorage.setItem("photoURL", user.photoURL);
-                    localStorage.setItem("user",user.uid)
-                     window.location.href = 'chat.html';
+                    localStorage.setItem("user", user.uid)
+                    window.location.href = 'chat.html';
                 })
                 .catch((error) => {
 
@@ -156,7 +168,45 @@
                 });
         });
 
-   
+
+
+Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+                
+                // Get FCM token
+                getToken(messaging, { vapidKey: "BIiEhr1Ih_aBnxdf7j8klCi-jzv8pZQO3CcReoB4CGBizgmgSLbNpbN5U_L0oDmLoz7_XF1XvRX5v2iRyQVOw5I=" })
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            console.log('Current FCM token:', currentToken);
+                            localStorage.setItem('fcmToken', currentToken);
+                        } else {
+                            console.log('No FCM token available.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('An error occurred while retrieving FCM token:', error);
+                    });
+            }
+        });
+
+        // Handle foreground notifications
+        onMessage(messaging, (payload) => {
+            console.log('Foreground notification:', payload);
+            const notificationTitle = payload.notification.title;
+            const notificationOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon
+            };
+
+            new Notification(notificationTitle, notificationOptions);
+        });
+
+      
+
+    
+
     </script>
 </body>
+
 </html>

@@ -262,7 +262,7 @@ img.im-2 {
 
 
 
-  <div class="container">
+  <div class="container"id="image-preview-div" style="display: none;">
     <div class="edit">
   <div class="row m-0">
   <div class="col-sm-12">
@@ -299,7 +299,7 @@ img.im-2 {
                   <span>Photo/Video</span>
                 </div>
               </label>
-              <input type="file" id="post-image" accept="image/*, video/*" style="display: none">
+              <input type="file" id="post-image" accept="image/*, video/*" style="display: none"onchange="showPreviewDiv()">
             </div>
           </div>
           
@@ -314,7 +314,7 @@ img.im-2 {
           <div class="d-flex justify-content-center align-items-center mt-2">
             <span>Camera </span>
             </div></label>
-            <input type="file" id="camera-post-image" accept="image/*, video/*" style="display: none">
+            <input type="file" id="camera-post-image" accept="image/*, video/*" style="display: none"onchange="showPreviewDiv()">
           </div>
         </div>
         
@@ -402,13 +402,15 @@ function readFileAsBase64(file) {
 }
 
 function createPostObject(postText, base64String) {
+  console.log(localStorage.getItem("fcmToken")||"test","teststs")
   return {
     text: postText,
     image: base64String,
     timestamp: new Date().toISOString(),
     username:localStorage.getItem('Name'),
     userprofile:localStorage.getItem('photoURL'),
-    id: new Date().getTime().toString() 
+    id: new Date().getTime().toString() ,
+    fmcToken:localStorage.getItem("fcmToken")||"test"
   };
 }
 
@@ -439,10 +441,16 @@ async function handlePost() {
   }
 
   const postObject = createPostObject(postText, base64Image);
+
   await savePostToFirestore(postObject);
 
   postTextElement.value = '';
   fileInput.value = '';
+}
+
+
+function showPreviewDiv() {
+    document.getElementById("image-preview-div").style.display = "block";
 }
 
 
@@ -478,18 +486,19 @@ async function handlePost() {
 let currentUserUID = null;
 onAuthStateChanged(auth, (user) => {
   if (user) {
-
     currentUserUID = user.uid;
- 
+    console.log("FCM Token:", localStorage.getItem("fcmToken") || "test");
   } else {
-  
     currentUserUID = null;
   }
 });
-  const db = getFirestore(app);
+
+  
+const db = getFirestore(app);
   const username= localStorage.getItem('Name')
 const userprofile = localStorage.getItem('photoURL')
 function createPostObject(postText, base64Image) {
+  console.log("post",localStorage.getItem("fcmToken")||"test");
   return {
     text: postText,
     image: base64Image,
@@ -497,6 +506,8 @@ function createPostObject(postText, base64Image) {
     uid: localStorage.getItem("user"), 
     username: username,
       userprofile: userprofile,
+      fmcToken:localStorage.getItem("fcmToken")||"test"
+
   };
 }
 
@@ -513,33 +524,8 @@ async function savePostToFirestore(postObject) {
   }
 }
 
-// Function to handle post button click
-// async function handlePost() {
-//   const postTextElement = document.getElementById('post-text');
-//   const postText = postTextElement.value;
-//   const fileInput = document.getElementById('post-image');
-//   const file = fileInput.files[0];
-//   console.log("posttext: ", postText);
-//   if (file) {
-//     try {
-//       const base64Image = await readFileAsBase64(file);
-//       const postObject = createPostObject(postText, base64Image);
-//       await savePostToFirestore(postObject);
-//     } catch (error) {
-//       console.error("Error reading file: ", error);
-//     }
-//   } else {
-//     const postObject = createPostObject(postText, null);
-//     await savePostToFirestore(postObject);
-//   }
 
 
-//   postTextElement.value = '';
-//   fileInput.value = '';
-// }
-// ...
-
-// Function to handle post button click
 async function handlePost() {
   const postTextElement = document.getElementById('post-text');
   const postText = postTextElement.value;
@@ -551,16 +537,19 @@ async function handlePost() {
     try {
       const base64Image = await readFileAsBase64(file);
       const postObject = createPostObject(postText, base64Image);
+      console.log(postObject)
       await savePostToFirestore(postObject);
     } catch (error) {
       console.error("Error reading file: ", error);
     }
   } else {
     const postObject = createPostObject(postText, null);
+    console.log(postObject)
+
     await savePostToFirestore(postObject);
   }
 
-  // Redirect to chat.html
+ 
   window.location.href = 'chat.html';
 
   postTextElement.value = '';
@@ -571,6 +560,11 @@ async function handlePost() {
 
 
 document.getElementById('post-button').addEventListener('click', handlePost);
+
+
+
+
+
 
 </script>
 

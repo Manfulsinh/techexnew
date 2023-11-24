@@ -362,11 +362,7 @@ input:checked + .slider:before {
         </div>
     </div>  
 
-     <!-- <div class="update-profile">
-        <button class="btn-update-profile-3">Update Profile</button>
-    </div>    
-
-     -->
+    
     
     
    
@@ -398,9 +394,9 @@ input:checked + .slider:before {
             };
 
             const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app); // Make sure you getAuth with the initialized app
+  const auth = getAuth(app);
 
-  // After DOM Content is loaded, attach your event listeners
+
   document.addEventListener("DOMContentLoaded", function() {
     const imageUpload = document.getElementById("imageUpload");
     const imagePreview = document.getElementById("imagePreview");
@@ -408,24 +404,60 @@ input:checked + .slider:before {
     const photourl = localStorage.getItem('photoURL');
     const username = localStorage.getItem('Name');
     
-    imagePreview.src = photourl; // This should be enough, no need to set it twice
-    userpreview.textContent = username; // Use textContent for plain text
+    imagePreview.src = photourl; 
+    userpreview.textContent = username; 
   });
 
-  // Sign Out Event
+  
   document.getElementById("signOutBtn").addEventListener("click", function() {
-    signOut(auth).then(function() { // Use the imported signOut method
+    signOut(auth).then(function() { 
       localStorage.setItem("isLogin", "false");
-      window.location.href = "index.html"; // Redirect to login page
+      window.location.href = "index.html"; 
     }).catch(function(error) {
       console.error("Sign Out Error", error);
     });
   });
 
-  // Back Event
+ 
   document.getElementById("back-icon").addEventListener("click", function() {
     window.location.href = "chat.html";
   });
+
+
+
+
+
+function handleLike(postId) {
+    
+
+    sendNotification(postId);
+}
+
+
+function sendNotification(postId) {
+
+    const notificationEndpoint = 'https://your-backend-api.com/send-notification';
+
+   
+    fetch(notificationEndpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            postId: postId,
+            action: 'like',
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Notification sent successfully:', data);
+    })
+    .catch(error => {
+        console.error('Error sending notification:', error);
+    });
+}
+
 </script> 
 
 

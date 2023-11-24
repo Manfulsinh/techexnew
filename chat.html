@@ -470,7 +470,7 @@ span.like-count {
 
 
 
-
+<!-- 
 
     <script type="module">
 
@@ -565,6 +565,8 @@ span.like-count {
 
 
 async function incrementLikeCount(postId, userEmail, newType) {
+  const fcmToken = localStorage.getItem('fcmToken');
+ 
   const postRef = doc(db, 'posts', postId);
   const userLikeRef = doc(db, 'posts', postId, 'likes', userEmail);
 
@@ -598,7 +600,7 @@ async function incrementLikeCount(postId, userEmail, newType) {
           totalLikes: totalLikes,
           latestLikeTimestamp: Date.now()
         });
-
+        console.log('New post timestamp:', Date.now());
        
         transaction.delete(userLikeRef);
         return;
@@ -634,6 +636,33 @@ async function incrementLikeCount(postId, userEmail, newType) {
     }
   }).then(() => {
     updateLikeCountUI(postId, newType);
+
+    let body = {
+      to: fcmToken,
+      "notification": {
+        "body": "create new order",
+        "title": "Notification",
+        "icon": "./img/TechX_logo-remove.png",
+        "image": "./img/TechX_logo-remove.png"
+      },
+      "data": {
+        "name": "Balbhadrasing"
+      }
+    };
+    console.log("Body ", body);
+    fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        'Authorization': 'key=AAAAdwT_N08:APA91bGvP7lvP-8rrIa17syIYkWUs2BrPj2U0uhr30y4KwLs5YaF0lvtZEVDd8ujMZDjveLHDY-rhrUPoSOuoloX0vHWEYsUamub2lFviPEoksdEtKzouimnLvUodcOwikCCUcuFXeae', 
+        'Content-Type': 'application/json',
+      }
+    }).then(res => {
+      console.log("fcm send res ", res);
+    }).catch(error => {
+      console.log("error in fcm ", error);
+    });
+
   }).catch((error) => {
     console.error("Transaction failed: ", error);
   });
@@ -644,9 +673,10 @@ async function incrementLikeCount(postId, userEmail, newType) {
 async function getPostsRealTime() {
   const postsCol = collection(db, 'posts');
   onSnapshot(postsCol, (snapshot) => {
-    const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    renderPosts(postsList);
-  });
+  console.log('Real-time update triggered!');
+  const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  renderPosts(postsList);
+});
 }
       async function getPosts() {
         const postsCol = collection(db, 'posts');
@@ -684,32 +714,49 @@ async function getPostsRealTime() {
 
 
 
+     
+ function renderPosts(posts) {
+  const postsElement = document.getElementById('posts');
+  if (!postsElement) {
+    console.error('No element with id "posts" found.');
+    return;
+  }
 
+  
+  if (!Array.isArray(posts)) {
+    console.error('Invalid posts data. Expected an array.');
+    return;
+  }
 
-      function renderPosts(posts) {
-    
+  
+  posts.sort((a, b) => {
+  const aTimestamp = a.postObject?.timestamp?.seconds || 0;
+  const bTimestamp = b.postObject?.timestamp?.seconds || 0;
+  return bTimestamp - aTimestamp;
+});
 
-        const postsElement = document.getElementById('posts');
-        if (!postsElement) {
-          console.error('No element with id "posts" found.');
-          return;
-        }
-        posts.sort((a, b) => b.postObject.timestamp.seconds - a.postObject.timestamp.seconds);
-        posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
-        postsElement.innerHTML = ''; // C
+posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
+ 
+  postsElement.innerHTML = '';
 
-        posts.forEach(post => {
-          const card = document.createElement('div');
-          card.className = 'card mb-3';
-          const postIdPrefix = /^\d/.test(post.id) ? '_' : '';
-          const sanitizedPostId = cssEscape(postIdPrefix + post.id);
-          card.setAttribute('id', sanitizedPostId);
+  posts.forEach(post => {
+    const card = document.createElement('div');
+    card.className = 'card mb-3';
+    const postIdPrefix = /^\d/.test(post.id) ? '_' : '';
+    const sanitizedPostId = cssEscape(postIdPrefix + post.id);
+    card.setAttribute('id', sanitizedPostId);
 
-          let dateTime = new Date(post.postObject.timestamp.seconds * 1000);
+  
+    if (!post.postObject) {
+   
+      return;
+    }
 
-          const isCreator = auth.currentUser && auth.currentUser.uid === post.postObject.uid;
+  
+    let dateTime = new Date(post.timestamp && post.timestamp.seconds ? post.timestamp.seconds * 1000 : 0);
 
-          card.innerHTML = `
+    const isCreator = auth.currentUser && auth.currentUser.uid === post.postObject.uid;
+    card.innerHTML = `
    
           <div class="card-header">
             <img class="avatar" src="${post.postObject.userprofile}" alt="User Avatar">
@@ -802,12 +849,401 @@ thumbsUpIcon.addEventListener('click', () => {
         });
       }
       document.addEventListener('DOMContentLoaded', () => {
+    
         getPostsRealTime();
 
       });
+
+
+
+      async function sendNotification(postId) {
+  try {
+    const response = await fetch('https://example.com/send-notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId: postId,
+        message: 'Someone liked your post!',
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send notification');
+    }
+
+    console.log('Notification sent successfully');
+  } catch (error) {
+    console.error('Error sending notification:', error);
+  }
+}
+
+
+
+
+    </script> -->
+
+
+    <script type="module">
+
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        deleteDoc,
+        doc,
+        updateDoc,
+        getDoc,
+        runTransaction,
+        onSnapshot
+      } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+      import { getAuth } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+    
+      const firebaseConfig = {
+        apiKey: "AIzaSyDrUOrEvp3T277JmKPOWVAZ90gBIKC9S50",
+        authDomain: "fir-b6449.firebaseapp.com",
+        projectId: "fir-b6449",
+        storageBucket: "fir-b6449.appspot.com",
+        messagingSenderId: "511184942927",
+        appId: "1:511184942927:web:debcb811d15856fd86b73a",
+        measurementId: "G-2TM34PV1YN"
+      };
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+    
+      function cssEscape(str) {
+        if (/^\d/.test(str)) {
+          str = '_' + str;
+        }
+        return String(str).replace(/([!#$%&()*+,./:;<=>?@[\]^`{|}~])/g, '\\$1').replace(/:/g, '\\:');
+      }
+    
+      function updateLikeCountUI(postId, newType) {
+        const postElement = document.getElementById(postId);
+        if (postElement) {
+          const likeCountElements = postElement.querySelectorAll('.like-count');
+          likeCountElements.forEach(el => {
+            const type = el.getAttribute('data-type');
+            let likeCount = parseInt(el.textContent);
+            if (type === newType) {
+              likeCount++;
+            }
+            el.textContent = likeCount;
+          });
+        }
+      }
+    
+      async function updateLikeCount(postId, userId, newType, oldType = null) {
+        const postRef = doc(db, 'posts', postId);
+        const userLikeRef = doc(db, 'posts', postId, 'likes', userId);
+    
+        await runTransaction(db, async (transaction) => {
+          const postDoc = await transaction.get(postRef);
+          if (!postDoc.exists()) {
+            throw new Error("Document does not exist!");
+          }
+    
+          const postData = postDoc.data();
+          const likes = postData.likes || {};
+          const updatedLikes = { ...likes };
+    
+          if (oldType) {
+            updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+          }
+          updatedLikes[newType] = (likes[newType] || 0) + 1;
+    
+          let totalLikes = postData.totalLikes || 0;
+          if (oldType !== newType) {
+            totalLikes += (oldType ? 0 : 1) - (likes[oldType] === 1 ? 1 : 0);
+          }
+    
+          transaction.update(postRef, {
+            likes: updatedLikes,
+            totalLikes: totalLikes,
+            latestLikeTimestamp: Date.now()
+          });
+          transaction.set(userLikeRef, { type: newType });
+        });
+      }
+    
+      async function incrementLikeCount(postId, userEmail, newType) {
+        const fcmToken = localStorage.getItem('fcmToken');
+    
+        const postRef = doc(db, 'posts', postId);
+        const userLikeRef = doc(db, 'posts', postId, 'likes', userEmail);
+    
+        await runTransaction(db, async (transaction) => {
+          const userLikeDoc = await transaction.get(userLikeRef);
+          const postDoc = await transaction.get(postRef);
+    
+          if (!postDoc.exists()) {
+            throw new Error("Post does not exist!");
+          }
+    
+          let oldType = null;
+          let postData = postDoc.data();
+    
+          const likes = postData.likes || {};
+          let updatedLikes = { ...likes };
+    
+          if (userLikeDoc.exists()) {
+            oldType = userLikeDoc.data().type;
+    
+            if (oldType === newType) {
+              updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+    
+              let totalLikes = postData.totalLikes || 0;
+              totalLikes -= likes[oldType] === 1 ? 1 : 0;
+    
+              transaction.update(postRef, {
+                likes: updatedLikes,
+                totalLikes: totalLikes,
+                latestLikeTimestamp: Date.now()
+              });
+              console.log('New post timestamp:', Date.now());
+    
+              transaction.delete(userLikeRef);
+              return;
+            }
+          }
+    
+          if (oldType) {
+            updatedLikes[oldType] = (likes[oldType] || 0) - 1;
+          }
+    
+          updatedLikes[newType] = (likes[newType] || 0) + 1;
+    
+          let totalLikes = 0;
+    
+          Object.values(updatedLikes).forEach(count => {
+            totalLikes += count;
+          });
+    
+          transaction.update(postRef, {
+            likes: updatedLikes,
+            totalLikes: totalLikes,
+            latestLikeTimestamp: Date.now()
+          });
+    
+          if (!userLikeDoc.exists() || oldType !== newType) {
+            transaction.set(userLikeRef, { type: newType, userEmail: userEmail });
+          }
+        }).then(() => {
+          updateLikeCountUI(postId, newType);
+    
+          let body = {
+            to: fcmToken,
+            "notification": {
+              "body": "Someone liked your post!",
+              "title": "Notification",
+              "icon": "./img/TechX_logo-remove.png",
+              "image": "./img/TechX_logo-remove.png"
+            },
+            "data": {
+              "name": "Balbhadrasing"
+            }
+          };
+          console.log("Body ", body);
+
+          fetch("https://fcm.googleapis.com/fcm/send", {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+              'Authorization': 'key=AAAAdwT_N08:APA91bGvP7lvP-8rrIa17syIYkWUs2BrPj2U0uhr30y4KwLs5YaF0lvtZEVDd8ujMZDjveLHDY-rhrUPoSOuoloX0vHWEYsUamub2lFviPEoksdEtKzouimnLvUodcOwikCCUcuFXeae',
+              'Content-Type': 'application/json',
+            }
+          }).then(res => res.json()).then(res => {
+            console.log("fcm send res ", res);
+          }).catch(error => {
+            console.log("error in fcm ", error);
+          });
+        }).catch((error) => {
+          console.error("Transaction failed: ", error);
+        });
+      }
+    
+      async function getPostsRealTime() {
+        const postsCol = collection(db, 'posts');
+        onSnapshot(postsCol, (snapshot) => {
+          console.log('Real-time update triggered!');
+          const postsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          renderPosts(postsList);
+        });
+      }
+    
+      async function getPosts() {
+        const postsCol = collection(db, 'posts');
+        try {
+          const postsSnapshot = await getDocs(postsCol);
+          const postsList = postsSnapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+          });
+    
+          renderPosts(postsList);
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        }
+      }
+    
+      window.deletePost = async function (postId) {
+        if (!postId) {
+          console.error('No Post ID provided for deletion.');
+          return;
+        }
+    
+        const postRef = doc(db, 'posts', postId);
+    
+        try {
+          await deleteDoc(postRef);
+    
+          getPosts();
+        } catch (error) {
+          console.error("Error deleting post:", error);
+        }
+      };
+    
+      function renderPosts(posts) {
+        const postsElement = document.getElementById('posts');
+        if (!postsElement) {
+          console.error('No element with id "posts" found.');
+          return;
+        }
+    
+        if (!Array.isArray(posts)) {
+          console.error('Invalid posts data. Expected an array.');
+          return;
+        }
+    
+        posts.sort((a, b) => {
+          const aTimestamp = a.postObject?.timestamp?.seconds || 0;
+          const bTimestamp = b.postObject?.timestamp?.seconds || 0;
+          return bTimestamp - aTimestamp;
+        });
+    
+        posts.sort((a, b) => b.latestLikeTimestamp - a.latestLikeTimestamp);
+    
+        postsElement.innerHTML = '';
+    
+        posts.forEach(post => {
+          const card = document.createElement('div');
+          card.className = 'card mb-3';
+          const postIdPrefix = /^\d/.test(post.id) ? '_' : '';
+          const sanitizedPostId = cssEscape(postIdPrefix + post.id);
+          card.setAttribute('id', sanitizedPostId);
+    
+          if (!post.postObject) {
+            return;
+          }
+    
+          let dateTime = new Date(post.timestamp && post.timestamp.seconds ? post.timestamp.seconds * 1000 : 0);
+    
+          const isCreator = auth.currentUser && auth.currentUser.uid === post.postObject.uid;
+          card.innerHTML = `
+            <div class="card-header">
+              <img class="avatar" src="${post.postObject.userprofile}" alt="User Avatar">
+              <div class="user-info">
+                <div class="user-name">${post.postObject.username}</div>
+                <div class="timestamp">${dateTime.toLocaleString()}</div>
+              </div>
+              ${isCreator ? '<i class="fas fa-ellipsis-h nice-icon ml-auto popoverIcon"></i>' : ''} 
+            </div>
+            ${isCreator ? `
+              <div class="popover-content">
+                <button class="popover-action-btn btn btn-light" data-post-id="${post.id}" onclick="editPost('${post.id}')">Edit Post</button>
+                <button class="popover-action-btn btn btn-light" data-post-id="${post.id}" onclick="deletePost('${post.id}')">Delete Post</button>
+              </div>
+            ` : ''}
+            <div class="card-body">
+              <p class="tweet-text">${post.postObject.text}</p>
+              ${post.postObject.image ? `<img src="${post.postObject.image}" class="post-image" alt="Post Image">` : ''}
+            </div>
+            <div class="card-footer">
+              <i class="fa-regular fa-heart like-icon" data-type="heart" aria-hidden="true"><span class="like-count" data-type="heart">${post.likes?.heart || 0}</span></i>
+              <i class="fa-regular fa-face-smile like-icon" data-type="smile" aria-hidden="true"><span class="like-count" data-type="smile">${post.likes?.smile || 0}</span></i>
+              <i class="fa-solid fa-thumbs-up like-icon" data-type="thumbs-up" aria-hidden="true"><span class="like-count" data-type="thumbs-up">${post.likes?.['thumbs-up'] || 0}</span></i>
+            </div>
+          `;
+    
+          const heartIcon = card.querySelector('[data-type="heart"]');
+          const smileIcon = card.querySelector('[data-type="smile"]');
+          const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
+    
+          heartIcon.addEventListener('click', () => {
+            if (auth.currentUser) {
+              incrementLikeCount(post.id, auth.currentUser.email, 'heart');
+            } else {
+              console.log("User is not authenticated.");
+            }
+          });
+    
+          smileIcon.addEventListener('click', () => {
+            if (auth.currentUser) {
+              incrementLikeCount(post.id, auth.currentUser.email, 'smile');
+            } else {
+              console.log("User is not authenticated.");
+            }
+          });
+    
+          thumbsUpIcon.addEventListener('click', () => {
+            if (auth.currentUser) {
+              incrementLikeCount(post.id, auth.currentUser.email, 'thumbs-up');
+            } else {
+              console.log("User is not authenticated.");
+            }
+          });
+    
+          postsElement.appendChild(card);
+          attachEventListenersToCard(card, post);
+    
+          function attachEventListenersToCard(card, post) {
+            const popoverIcon = card.querySelector('.popoverIcon');
+            if (popoverIcon) {
+              popoverIcon.addEventListener('click', () => {
+                if (auth.currentUser) {
+                  const currentUserID = auth.currentUser.uid;
+                  if (localStorage.getItem("user") === post.postObject.uid) {
+                    const popoverContent = card.querySelector('.popover-content');
+                    popoverContent.style.display = popoverContent.style.display === 'block' ? 'none' : 'block';
+                  }
+                }
+              });
+            }
+          }
+        });
+      }
+    
+      document.addEventListener('DOMContentLoaded', () => {
+        getPostsRealTime();
+      });
+    
+      async function sendNotification(postId) {
+        try {
+          const response = await fetch('https://example.com/send-notification', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              postId: postId,
+              message: 'Someone liked your post!',
+            }),
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to send notification');
+          }
+    
+          console.log('Notification sent successfully');
+        } catch (error) {
+          console.error('Error sending notification:', error);
+        }
+      }
+    
     </script>
-
-
+    
 
 
 </body>
