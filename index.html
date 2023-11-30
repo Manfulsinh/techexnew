@@ -191,16 +191,16 @@ Notification.requestPermission().then(permission => {
         });
 
         // Handle foreground notifications
-        onMessage(messaging, (payload) => {
-            console.log('Foreground notification:', payload);
-            const notificationTitle = payload.notification.title;
-            const notificationOptions = {
-                body: payload.notification.body,
-                icon: payload.notification.icon
-            };
+        // onMessage(messaging, (payload) => {
+        //     console.log('Foreground notification:', payload);
+        //     const notificationTitle = payload.notification.title;
+        //     const notificationOptions = {
+        //         body: payload.notification.body,
+        //         icon: payload.notification.icon
+        //     };
 
-            new Notification(notificationTitle, notificationOptions);
-        });
+        //     new Notification(notificationTitle, notificationOptions);
+        // });
 
       
 

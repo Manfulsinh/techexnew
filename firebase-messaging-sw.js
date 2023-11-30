@@ -33,3 +33,24 @@ messaging.setBackgroundMessageHandler(function(payload) {
   self.registration.showNotification("hello,world")
 
 });
+
+
+
+
+// Check if the browser supports notifications
+if ('Notification' in window) {
+  // Request permission to show notifications
+  Notification.requestPermission().then(function (permission) {
+    if (permission === 'granted') {
+      // Create a notification
+      var notification = new Notification('Hello, World!', {
+        body: 'This is a notification example.'
+      });
+
+      // Close the notification after a certain amount of time (optional)
+      setTimeout(notification.close.bind(notification), 5000);
+    }
+  });
+} else {
+  console.log('This browser does not support notifications.');
+}
