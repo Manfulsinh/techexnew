@@ -38,7 +38,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
 
 
 // Check if the browser supports notifications
-if ('Notification' in window) {
+if (typeof window !== 'undefined' && 'Notification' in window) {
   // Request permission to show notifications
   Notification.requestPermission().then(function (permission) {
     if (permission === 'granted') {

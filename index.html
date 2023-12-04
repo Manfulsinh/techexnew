@@ -104,8 +104,7 @@
                         </svg>&emsp;LOG IN WITH GOOGLE</button>
                 </center>
             </div>
-            <!--                 
-                <button class="sign-out" id="signOut">LOG OUT</button> -->
+      
         </div>
     </div>
 
@@ -115,7 +114,6 @@
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-        // import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js";
         import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-messaging.js';
 
 
@@ -133,7 +131,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const messaging = getMessaging(app, {
-            vapidKey: "BIiEhr1Ih_aBnxdf7j8klCi-jzv8pZQO3CcReoB4CGBizgmgSLbNpbN5U_L0oDmLoz7_XF1XvRX5v2iRyQVOw5I=",
+            vapidKey: "AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79",
             serviceWorkerRegistration: {
                 url: 'firebase-messaging-sw.js' // Adjust the path based on your file location
             },
@@ -175,7 +173,7 @@ Notification.requestPermission().then(permission => {
                 console.log('Notification permission granted.');
                 
                 // Get FCM token
-                getToken(messaging, { vapidKey: "BIiEhr1Ih_aBnxdf7j8klCi-jzv8pZQO3CcReoB4CGBizgmgSLbNpbN5U_L0oDmLoz7_XF1XvRX5v2iRyQVOw5I=" })
+                getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4"})
                     .then((currentToken) => {
                         if (currentToken) {
                             console.log('Current FCM token:', currentToken);
@@ -190,17 +188,6 @@ Notification.requestPermission().then(permission => {
             }
         });
 
-        // Handle foreground notifications
-        // onMessage(messaging, (payload) => {
-        //     console.log('Foreground notification:', payload);
-        //     const notificationTitle = payload.notification.title;
-        //     const notificationOptions = {
-        //         body: payload.notification.body,
-        //         icon: payload.notification.icon
-        //     };
-
-        //     new Notification(notificationTitle, notificationOptions);
-        // });
 
       
 

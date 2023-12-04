@@ -500,6 +500,10 @@ span.like-count {
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const auth = getAuth(app);
+
+      
+    
+   
     
       function cssEscape(str) {
         if (/^\d/.test(str)) {
@@ -640,7 +644,7 @@ span.like-count {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
-              'Authorization': 'key=AAAAdwT_N08:APA91bGvP7lvP-8rrIa17syIYkWUs2BrPj2U0uhr30y4KwLs5YaF0lvtZEVDd8ujMZDjveLHDY-rhrUPoSOuoloX0vHWEYsUamub2lFviPEoksdEtKzouimnLvUodcOwikCCUcuFXeae',
+              'Authorization': 'key=AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79',
               'Content-Type': 'application/json',
             }
           }).then(res => res.json()).then(res => {
@@ -654,7 +658,6 @@ span.like-count {
       }
 
 
-    
       async function getPostsRealTime() {
         const postsCol = collection(db, 'posts');
         onSnapshot(postsCol, (snapshot) => {
@@ -749,18 +752,16 @@ span.like-count {
             <div class="card-body">
               <p class="tweet-text">${post.postObject.text}</p>
               ${post.postObject.image ? `<img src="${post.postObject.image}" class="post-image" alt="Post Image">` : ''}
-            </div>
-            <div class="card-footer">
-  <i class="fa-regular fa-heart like-icon likeButton" data-type="heart" aria-hidden="true"><span class="like-count">${post.likes?.heart || 0}</span></i>
-  <i class="fa-regular fa-face-smile like-icon likeButton" data-type="smile" aria-hidden="true"><span class="like-count">${post.likes?.smile || 0}</span></i>
-  <i class="fa-solid fa-thumbs-up like-icon likeButton" data-type="thumbs-up" aria-hidden="true"><span class="like-count">${post.likes?.['thumbs-up'] || 0}</span></i>
-</div>
+              <div class="card-footer">
+      <i id="heartIcon_${post.id}" class="fa-regular fa-heart like-icon likeButton" data-type="heart" aria-hidden="true"><span class="like-count">${post.likes?.heart || 0}</span></i>
+      <i id="smileIcon_${post.id}" class="fa-regular fa-face-smile like-icon likeButton" data-type="smile" aria-hidden="true"><span class="like-count">${post.likes?.smile || 0}</span></i>
+      <i id="thumbsUpIcon_${post.id}" class="fa-solid fa-thumbs-up like-icon likeButton" data-type="thumbs-up" aria-hidden="true"><span class="like-count">${post.likes?.['thumbs-up'] || 0}</span></i>
+    </div>
 
           `;
-    
-          const heartIcon = card.querySelector('[data-type="heart"]');
-          const smileIcon = card.querySelector('[data-type="smile"]');
-          const thumbsUpIcon = card.querySelector('[data-type="thumbs-up"]');
+          const heartIcon = card.querySelector(`#heartIcon_${post.id}`);
+  const smileIcon = card.querySelector(`#smileIcon_${post.id}`);
+  const thumbsUpIcon = card.querySelector(`#thumbsUpIcon_${post.id}`);
     
           heartIcon.addEventListener('click', () => {
             if (auth.currentUser) {
@@ -812,15 +813,22 @@ span.like-count {
     
       async function sendNotification(postId) {
         try {
-          const response = await fetch('https://example.com/send-notification', {
+          const response = await fetch("https://fcm.googleapis.com/fcm/send", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization':`key=AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79`
             },
             body: JSON.stringify({
-              postId: postId,
-              message: 'Someone liked your post!',
-            }),
+                "to": postId,
+                  "notification": {
+                      "body": "'Thanks for liking",
+                      "title": "Notification",
+                      "icon": "./img/Screenshot.png",
+                      "image": ""
+                  },
+            }
+            ),
           });
     
           if (!response.ok) {
@@ -832,86 +840,77 @@ span.like-count {
           console.error('Error sending notification:', error);
         }
       }
+
+      document.addEventListener('DOMContentLoaded', function() {
+      document.body.addEventListener('click', async function(event) {
+          var clickedElement = event.target.closest('.likeButton');
+          if (clickedElement) {
+              var likeType = clickedElement.getAttribute('data-type');
+
+              
+              var cardElement = clickedElement.closest('.card');
+              var postId = cardElement ? cardElement.getAttribute('id') : null;
+              var usernameElement = cardElement.querySelector('.user-name');
+              var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous'; 
+
+
+              if (postId) {
+                console.log('Liked post with ID:', postId.replace("_",""));
+                 const postRef = doc(db, 'posts', postId.replace("_",""));
+                 let post = await getDoc(postRef)
+                 post = post.data();
+                console.log("posts",post);
+                sendNotification(post.postObject.fmcToken)
+            }
+              handleLikeButtonClick(likeType, username); 
+          }
+      });
+  });
     
     </script>
-   
- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.body.addEventListener('click', function(event) {
-        var clickedElement = event.target.closest('.likeButton');
-        if (clickedElement) {
-            var likeType = clickedElement.getAttribute('data-type');
-
-            // Traverse up to the nearest post card and find the username
-            var cardElement = clickedElement.closest('.card');
-            var usernameElement = cardElement.querySelector('.user-name');
-            var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous'; // Use 'Anonymous' if username is not found
-
-            handleLikeButtonClick(likeType, username); // Pass the username
-        }
-    });
-});
-
-function handleLikeButtonClick(likeType, username) {
-    if ('Notification' in window) {
-        if (Notification.permission === 'granted') {
-            showNotification(username);
-        } else if (Notification.permission !== 'denied') {
-            Notification.requestPermission().then(function(permission) {
-                if (permission === 'granted') {
-                    showNotification(username);
-                }
-            });
-        }
-    } else {
-        console.log('This browser does not support notifications.');
-    }
-}
-
-function showNotification(username) {
-    try {
-        var notification = new Notification('Liked!', {
-            body: 'Thanks for liking, ' + username + '!'
-        });
-
-        setTimeout(notification.close.bind(notification), 5000);
-    } catch (e) {
-        console.error('Failed to show notification:', e);
-    }
-}
+    
+   <script>
 
 
-
-
-
-async function sendLikeNotification(postId, likingUserEmail) {
-  try {
-    const response = await fetch('/api/send-notification', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        postId: postId,
-        likedBy: likingUserEmail,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to send notification');
-    }
-
-    console.log('Notification sent successfully');
-  } catch (error) {
-    console.error('Error sending notification:', error);
+  function handleLikeButtonClick(likeType, username) {
+      // if ('Notification' in window) {
+      //     if (Notification.permission === 'granted') {
+      //         showNotification(username);
+      //     } else if (Notification.permission !== 'denied') {
+      //         Notification.requestPermission().then(function(permission) {
+      //             if (permission === 'granted') {
+      //                 showNotification(username);
+      //             }
+      //         });
+      //     }
+      // } else {
+      //     console.log('This browser does not support notifications.');
+      // }
   }
-}
+
+  function showNotification(username) {
+
+    const username1 = localStorage.getItem('Name');
+      try {
+          var notification = new Notification('Liked!', {
+              body: 'Thanks for liking, ' + username1 + '!'
+          });
+
+          setTimeout(notification.close.bind(notification), 5000);
+      } catch (e) {
+          console.error('Failed to show notification:', e);
+      }
+  }
 
 
 
-</script>   
 
 
+  </script>     
+
+
+ 
+    
     </body>
 
 </html>
