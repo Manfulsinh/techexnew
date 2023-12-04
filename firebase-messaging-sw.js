@@ -1,5 +1,7 @@
 importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging-compat.js');
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js";
 //     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-analytics-compat.js";
 //     import { getMessaging } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-messaging-compat.js";
