@@ -14,75 +14,7 @@
 </head>
 
 <body>
-    <style>
-        /* html,
-        body {
-            height: 100%;
-            margin: 0;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        img {
-            max-width: 50%;
-            height: auto;
-        }
-
-        .facebook {
-            width: 100%;
-            max-width: 300px;
-            padding: 15px;
-            font-size: 1rem;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-
-        }
-
-        button#glogin {
-            width: 93%;
-            max-width: 300px;
-            padding: 10px;
-            font-size: 1rem;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-
-        }
-
-        .social-login svg {
-            width: 1em;
-            height: 1em;
-            margin-right: 8px;
-        }
-
-
-        @media (min-width: 768px) {
-
-            .social-login button,
-            .sign-out {
-                width: auto;
-                padding: 10px 20px;
-            }
-
-
-            .container {
-                padding: 40px;
-            }
-        } */
-    </style>
+   
     <div class="container">
         <div>
             <center><img src="./img/TechX_logo-remove.png" alt=""></center>
@@ -133,7 +65,7 @@
         const messaging = getMessaging(app, {
             vapidKey: "AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79",
             serviceWorkerRegistration: {
-                url: './firebase-messaging-sw.js' // Adjust the path based on your file location
+                url: 'https://manfulsinh.github.io/techexnew/firebase-messaging-sw.js' // Adjust the path based on your file location
             },
         });
         console.log(messaging, "messaging")
