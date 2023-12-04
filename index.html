@@ -14,7 +14,7 @@
 </head>
 
 <body>
-   
+
     <div class="container">
         <div>
             <center><img src="./img/TechX_logo-remove.png" alt=""></center>
@@ -69,7 +69,7 @@
             },
         });
         console.log(messaging, "messaging")
-       
+
 
         const googleProvider = new GoogleAuthProvider();
         const facebookProvider = new FacebookAuthProvider();
@@ -100,30 +100,49 @@
 
 
 
-Notification.requestPermission().then(permission => {
+        Notification.requestPermission().then(async (permission) => {
             if (permission === 'granted') {
                 console.log('Notification permission granted.');
-                
-                // Get FCM token
-                getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4"})
-                    .then((currentToken) => {
-                        if (currentToken) {
-                            console.log('Current FCM token:', currentToken);
-                            localStorage.setItem('fcmToken', currentToken);
-                        } else {
-                            console.log('No FCM token available.');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('An error occurred while retrieving FCM token:', error);
+                const tempMessaging = await messaging();
+
+                if (tempMessaging) {
+                    const newSw = await navigator.serviceWorker.register(
+                        './firebase-messaging-sw.js'
+                    );
+
+                    return getNotificationPermission(async () => {
+                        await getToken(tempMessaging, { vapidKey: 'BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4', serviceWorkerRegistration: newSw }).then((currentToken) => {
+                            if (currentToken) {
+                                console.log('Current FCM token:', currentToken);
+                                localStorage.setItem('fcmToken', currentToken);
+                            } else {
+                                console.log('No FCM token available.');
+                            }
+                        }).catch((error) => {
+                            console.error('An error occurred while retrieving FCM token:', error);
+                        })
                     });
+                }
+                // Get FCM token
+                // getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4" })
+                //     .then((currentToken) => {
+                //         if (currentToken) {
+                //             console.log('Current FCM token:', currentToken);
+                //             localStorage.setItem('fcmToken', currentToken);
+                //         } else {
+                //             console.log('No FCM token available.');
+                //         }
+                //     })
+                //     .catch((error) => {
+                //         console.error('An error occurred while retrieving FCM token:', error);
+                //     });
             }
         });
 
 
-      
 
-    
+
+
 
     </script>
 </body>
