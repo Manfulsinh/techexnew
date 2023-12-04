@@ -65,7 +65,7 @@
         const messaging = getMessaging();
         console.log(messaging, "messaging");
         navigator.serviceWorker.register(
-            'https://manfulsinh.github.io/techexnew/firebase-messaging-sw.js'
+            'techexnew/firebase-messaging-sw.js'
         ).then(register => {
             console.log("ngsw registerd", register);
             // messaging.useServiceWorker(register);
