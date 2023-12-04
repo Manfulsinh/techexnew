@@ -68,8 +68,11 @@
             'https://manfulsinh.github.io/techexnew/firebase-messaging-sw.js'
         ).then(register => {
             console.log("ngsw registerd", register);
-            messaging.useServiceWorker(register);
-            getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4", register }).then((currentToken) => {
+            // messaging.useServiceWorker(register);
+            getToken(messaging, {
+                vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4",
+                serviceWorkerRegistration: register
+            }).then((currentToken) => {
                 if (currentToken) {
                     console.log('Current FCM token:', currentToken);
                     localStorage.setItem('fcmToken', currentToken);
