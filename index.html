@@ -62,13 +62,18 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const messaging = getMessaging(app, {
-            // vapidKey: "AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79",
-            // serviceWorkerRegistration: {
-            //     url: 'https://manfulsinh.github.io/techexnew/firebase-messaging-sw.js',// Adjust the path based on your file location
-            // },
+        const messaging = getMessaging();
+        console.log(messaging, "messaging");
+        getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4" }).then((currentToken) => {
+            if (currentToken) {
+                console.log('Current FCM token:', currentToken);
+                localStorage.setItem('fcmToken', currentToken);
+            } else {
+                console.log('No FCM token available.');
+            }
+        }).catch((error) => {
+            console.error('An error occurred while retrieving FCM token:', error);
         });
-        console.log(messaging, "messaging")
 
 
         const googleProvider = new GoogleAuthProvider();
@@ -105,18 +110,7 @@
                 console.log('Notification permission granted.');
 
                 // Get FCM token
-                getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4" })
-                    .then((currentToken) => {
-                        if (currentToken) {
-                            console.log('Current FCM token:', currentToken);
-                            localStorage.setItem('fcmToken', currentToken);
-                        } else {
-                            console.log('No FCM token available.');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('An error occurred while retrieving FCM token:', error);
-                    });
+
             }
         });
 
