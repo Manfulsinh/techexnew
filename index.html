@@ -64,11 +64,11 @@
         const auth = getAuth(app);
         const messaging = getMessaging();
         console.log(messaging, "messaging");
-        const newSw = await navigator.serviceWorker.register(
+        navigator.serviceWorker.register(
             'https://manfulsinh.github.io/techexnew/firebase-messaging-sw.js'
         ).then(register => {
             console.log("ngsw registerd", register)
-            getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4", newSw }).then((currentToken) => {
+            getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4", register }).then((currentToken) => {
                 if (currentToken) {
                     console.log('Current FCM token:', currentToken);
                     localStorage.setItem('fcmToken', currentToken);
