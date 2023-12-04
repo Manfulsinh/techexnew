@@ -66,16 +66,20 @@
         console.log(messaging, "messaging");
         const newSw = await navigator.serviceWorker.register(
             'https://manfulsinh.github.io/techexnew/firebase-messaging-sw.js'
-        );
-        getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4", newSw }).then((currentToken) => {
-            if (currentToken) {
-                console.log('Current FCM token:', currentToken);
-                localStorage.setItem('fcmToken', currentToken);
-            } else {
-                console.log('No FCM token available.');
-            }
-        }).catch((error) => {
-            console.error('An error occurred while retrieving FCM token:', error);
+        ).then(register => {
+            console.log("ngsw registerd", register)
+            getToken(messaging, { vapidKey: "BJnzcOgSupGjACmEqinLpEBYtQUHD3DOTdYtyNUyzu9Vp4Ddqb7qL6y6fz7Mg-i1ikElRhzIM3qRFPuZF0kgen4", newSw }).then((currentToken) => {
+                if (currentToken) {
+                    console.log('Current FCM token:', currentToken);
+                    localStorage.setItem('fcmToken', currentToken);
+                } else {
+                    console.log('No FCM token available.');
+                }
+            }).catch((error) => {
+                console.error('An error occurred while retrieving FCM token:', error);
+            });
+        }).catch(registerErr => {
+            console.log("ngsw register err", registerErr)
         });
 
 
