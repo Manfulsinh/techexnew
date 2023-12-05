@@ -597,7 +597,7 @@ span.like-count {
                 totalLikes: totalLikes,
                 latestLikeTimestamp: Date.now()
               });
-              console.log('New post timestamp:', Date.now());
+              // console.log('New post timestamp:', Date.now());
     
               transaction.delete(userLikeRef);
               return;
@@ -746,7 +746,7 @@ span.like-count {
             if (auth.currentUser) {
               incrementLikeCount(post.id, auth.currentUser.email, 'heart');
             } else {
-              console.log("User is not authenticated.");
+              // console.log("User is not authenticated.");
             }
           });
     
@@ -754,7 +754,7 @@ span.like-count {
             if (auth.currentUser) {
               incrementLikeCount(post.id, auth.currentUser.email, 'smile');
             } else {
-              console.log("User is not authenticated.");
+              // console.log("User is not authenticated.");
             }
           });
     
@@ -762,7 +762,7 @@ span.like-count {
             if (auth.currentUser) {
               incrementLikeCount(post.id, auth.currentUser.email, 'thumbs-up');
             } else {
-              console.log("User is not authenticated.");
+              // console.log("User is not authenticated.");
             }
           });
     
@@ -815,7 +815,7 @@ span.like-count {
             throw new Error('Failed to send notification');
           }
     
-          console.log('Notification sent successfully');
+          // console.log('Notification sent successfully');
         } catch (error) {
           console.error('Error sending notification:', error);
         }
@@ -834,11 +834,11 @@ span.like-count {
       var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous';
 
       if (postId) {
-        console.log('Liked post with ID:', postId.replace("_",""));
+        // console.log('Liked post with ID:', postId.replace("_",""));
         const postRef = doc(db, 'posts', postId.replace("_",""));
         let post = await getDoc(postRef)
         post = post.data();
-        console.log("posts",post);
+        // console.log("posts",post);
         sendNotification(post.postObject.fmcToken, username)
       }
     }
