@@ -406,18 +406,22 @@ input:checked + .slider:before {
     
     imagePreview.src = photourl; 
     userpreview.textContent = username; 
-  });
+ 
 
   
   document.getElementById("signOutBtn").addEventListener("click", function() {
-    signOut(auth).then(function() { 
-      localStorage.setItem("isLogin", "false");
-      window.location.href = "index.html"; 
-    }).catch(function(error) {
-      console.error("Sign Out Error", error);
-    });
-  });
-
+                signOut(auth).then(() => {
+                    // Clear user data from localStorage and redirect to login page
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("Name");
+                    localStorage.removeItem("emailID");
+                    localStorage.removeItem("photoURL");
+                    window.location.href = "index.html"; // Replace with your login page URL
+                }).catch((error) => {
+                    console.error("Sign Out Error", error);
+                });
+            });
+        });
  
   document.getElementById("back-icon").addEventListener("click", function() {
     window.location.href = "chat.html";
@@ -427,36 +431,36 @@ input:checked + .slider:before {
 
 
 
-function handleLike(postId) {
+// function handleLike(postId) {
     
 
-    sendNotification(postId);
-}
+//     sendNotification(postId);
+// }
 
 
-function sendNotification(postId) {
+// function sendNotification(postId) {
 
-    const notificationEndpoint = 'https://your-backend-api.com/send-notification';
+//     const notificationEndpoint = 'https://your-backend-api.com/send-notification';
 
    
-    fetch(notificationEndpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            postId: postId,
-            action: 'like',
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Notification sent successfully:', data);
-    })
-    .catch(error => {
-        console.error('Error sending notification:', error);
-    });
-}
+//     fetch(notificationEndpoint, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             postId: postId,
+//             action: 'like',
+//         }),
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log('Notification sent successfully:', data);
+//     })
+//     .catch(error => {
+//         console.error('Error sending notification:', error);
+//     });
+// }
 
 </script> 
 

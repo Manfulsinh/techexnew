@@ -422,7 +422,9 @@ span.like-count {
 
 
 
-
+      if (!localStorage.getItem('user')) {
+                  window.location.href = 'index.html';
+              }
 
       function loadPosts() {
         const postsContainer = document.getElementById('post-container');
@@ -626,32 +628,6 @@ span.like-count {
         }).then(() => {
           updateLikeCountUI(postId, newType);
     
-          let body = {
-            to: fcmToken,
-            "notification": {
-              "body": "Someone liked your post!",
-              "title": "Notification",
-              "icon": "./img/TechX_logo-remove.png",
-              "image": "./img/TechX_logo-remove.png"
-            },
-            "data": {
-              "name": "Balbhadrasing"
-            }
-          };
-          console.log("Body ", body);
-
-          fetch("https://fcm.googleapis.com/fcm/send", {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-              'Authorization': 'key=AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79',
-              'Content-Type': 'application/json',
-            }
-          }).then(res => res.json()).then(res => {
-            console.log("fcm send res ", res);
-          }).catch(error => {
-            console.log("error in fcm ", error);
-          });
         }).catch((error) => {
           console.error("Transaction failed: ", error);
         });
@@ -811,7 +787,7 @@ span.like-count {
         getPostsRealTime();
       });
     
-      async function sendNotification(postId) {
+      async function sendNotification(postId,username) {
         try {
           const response = await fetch("https://fcm.googleapis.com/fcm/send", {
             method: 'POST',
@@ -820,14 +796,13 @@ span.like-count {
               'Authorization':`key=AAAAdwT_N08:APA91bEqk3mauwwbOjStFFgTErCKCWMzIoHEBLVCIcuwWvtc3a43dBvS2gVAsOy4BTFC6vhx8bNtrTaTAZ-tcZ2aG2Jguzc8RtsgSB6ciTqkJNOy3qfWNKMVNBB1ui1OWIPb9CZUWZ79`
             },
             body: JSON.stringify({
-                "to": postId,
-                  "notification": {
-                      "body": "'Thanks for liking",
-                      "title": "Notification",
-                      "icon": "./img/Screenshot.png",
-                      "image": ""
+              "to": postId,
+             "notification": {
+             "title": "New Like",
+              "body": username + " liked your post!"
                   },
             }
+            
             ),
           });
     
@@ -841,51 +816,61 @@ span.like-count {
         }
       }
 
-      document.addEventListener('DOMContentLoaded', function() {
-      document.body.addEventListener('click', async function(event) {
-          var clickedElement = event.target.closest('.likeButton');
-          if (clickedElement) {
-              var likeType = clickedElement.getAttribute('data-type');
+  //     document.addEventListener('DOMContentLoaded', function() {
+  //     document.body.addEventListener('click', async function(event) {
+  //         var clickedElement = event.target.closest('.likeButton');
+  //         if (clickedElement) {
+  //             var likeType = clickedElement.getAttribute('data-type');
 
               
-              var cardElement = clickedElement.closest('.card');
-              var postId = cardElement ? cardElement.getAttribute('id') : null;
-              var usernameElement = cardElement.querySelector('.user-name');
-              var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous'; 
+  //             var cardElement = clickedElement.closest('.card');
+  //             var postId = cardElement ? cardElement.getAttribute('id') : null;
+  //             var usernameElement = cardElement.querySelector('.user-name');
+  //             var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous'; 
 
 
-              if (postId) {
-                console.log('Liked post with ID:', postId.replace("_",""));
-                 const postRef = doc(db, 'posts', postId.replace("_",""));
-                 let post = await getDoc(postRef)
-                 post = post.data();
-                console.log("posts",post);
-                sendNotification(post.postObject.fmcToken)
-            }
-              handleLikeButtonClick(likeType, username); 
-          }
-      });
+  //             if (postId) {
+  //               console.log('Liked post with ID:', postId.replace("_",""));
+  //                const postRef = doc(db, 'posts', postId.replace("_",""));
+  //                let post = await getDoc(postRef)
+  //                post = post.data();
+  //               console.log("posts",post);
+  //               sendNotification(post.postObject.fmcToken)
+  //           }
+  //             handleLikeButtonClick(likeType, username); 
+  //         }
+  //     });
+  // });
+  document.addEventListener('DOMContentLoaded', function() {
+  document.body.addEventListener('click', async function(event) {
+    var clickedElement = event.target.closest('.likeButton');
+    if (clickedElement) {
+      var likeType = clickedElement.getAttribute('data-type');
+
+      var cardElement = clickedElement.closest('.card');
+      var postId = cardElement ? cardElement.getAttribute('id') : null;
+      var usernameElement = cardElement.querySelector('.user-name');
+      var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous';
+
+      if (postId) {
+        console.log('Liked post with ID:', postId.replace("_",""));
+        const postRef = doc(db, 'posts', postId.replace("_",""));
+        let post = await getDoc(postRef)
+        post = post.data();
+        console.log("posts",post);
+        sendNotification(post.postObject.fmcToken, username)
+      }
+    }
   });
-    
+});
+
     </script>
     
    <script>
 
 
   function handleLikeButtonClick(likeType, username) {
-      // if ('Notification' in window) {
-      //     if (Notification.permission === 'granted') {
-      //         showNotification(username);
-      //     } else if (Notification.permission !== 'denied') {
-      //         Notification.requestPermission().then(function(permission) {
-      //             if (permission === 'granted') {
-      //                 showNotification(username);
-      //             }
-      //         });
-      //     }
-      // } else {
-      //     console.log('This browser does not support notifications.');
-      // }
+   
   }
 
   function showNotification(username) {
