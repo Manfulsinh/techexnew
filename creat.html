@@ -487,7 +487,7 @@ let currentUserUID = null;
 onAuthStateChanged(auth, (user) => {
   if (user) {
     currentUserUID = user.uid;
-    console.log("FCM Token:", localStorage.getItem("fcmToken") || "test");
+    // console.log("FCM Token:", localStorage.getItem("fcmToken") || "test");
   } else {
     currentUserUID = null;
   }
@@ -498,7 +498,7 @@ const db = getFirestore(app);
   const username= localStorage.getItem('Name')
 const userprofile = localStorage.getItem('photoURL')
 function createPostObject(postText, base64Image) {
-  console.log("post",localStorage.getItem("fcmToken")||"test");
+  // console.log("post",localStorage.getItem("fcmToken")||"test");
   return {
     text: postText,
     image: base64Image,
@@ -518,7 +518,7 @@ async function savePostToFirestore(postObject) {
     const docRef = await addDoc(collection(db, "posts"), {
       postObject,
     });
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
   } catch (error) {
     console.error("Error adding document: ", error);
   }
@@ -531,20 +531,20 @@ async function handlePost() {
   const postText = postTextElement.value;
   const fileInput = document.getElementById('post-image');
   const file = fileInput.files[0];
-  console.log("posttext: ", postText);
+  // console.log("posttext: ", postText);
   
   if (file) {
     try {
       const base64Image = await readFileAsBase64(file);
       const postObject = createPostObject(postText, base64Image);
-      console.log(postObject)
+      // console.log(postObject)
       await savePostToFirestore(postObject);
     } catch (error) {
       console.error("Error reading file: ", error);
     }
   } else {
     const postObject = createPostObject(postText, null);
-    console.log(postObject)
+    // console.log(postObject)
 
     await savePostToFirestore(postObject);
   }

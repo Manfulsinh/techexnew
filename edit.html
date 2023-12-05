@@ -432,7 +432,7 @@ async function populateForm(postId) {
   const postSnap = await getDoc(postRef);
 
   if (postSnap.exists()) {
-    console.log(postSnap.data())
+    // console.log(postSnap.data())
     const postData = postSnap.data();
     document.getElementById('edit-text').value = postData.postObject.text || '';
   
@@ -491,7 +491,7 @@ async function updatePost(postId) {
   
   try {
     const snapshot = await uploadBytes(storageReference, file);
-    console.log('Uploaded a blob or file!');
+    // console.log('Uploaded a blob or file!');
     const downloadURL = await getDownloadURL(snapshot.ref);
 
     const postRef = doc(db, 'posts', postId);
