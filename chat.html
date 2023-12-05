@@ -707,15 +707,19 @@ span.like-count {
             return;
           }
     
-          let dateTime = new Date(post.timestamp && post.timestamp.seconds ? post.timestamp.seconds * 1000 : 0);
-    
+          // let dateTime = new Date(post.timestamp && post.timestamp.seconds ? post.timestamp.seconds * 1000 : 0);
+          let dateTime = String(new Date()); 
+          let currentTime=post.postObject.timestamp;
+          console.log()
+          currentTime=new Date(currentTime.seconds*1000);
+          console.log(currentTime);
           const isCreator = auth.currentUser && auth.currentUser.uid === post.postObject.uid;
           card.innerHTML = `
             <div class="card-header">
               <img class="avatar" src="${post.postObject.userprofile}" alt="User Avatar">
               <div class="user-info">
                 <div class="user-name">${post.postObject.username}</div>
-                <div class="timestamp">${dateTime.toLocaleString()}</div>
+                <div class="timestamp">${currentTime.toLocaleString()}</div>
               </div>
               ${isCreator ? '<i class="fas fa-ellipsis-h nice-icon ml-auto popoverIcon"></i>' : ''} 
             </div>
@@ -818,31 +822,7 @@ span.like-count {
         }
       }
 
-  //     document.addEventListener('DOMContentLoaded', function() {
-  //     document.body.addEventListener('click', async function(event) {
-  //         var clickedElement = event.target.closest('.likeButton');
-  //         if (clickedElement) {
-  //             var likeType = clickedElement.getAttribute('data-type');
-
-              
-  //             var cardElement = clickedElement.closest('.card');
-  //             var postId = cardElement ? cardElement.getAttribute('id') : null;
-  //             var usernameElement = cardElement.querySelector('.user-name');
-  //             var username = usernameElement ? usernameElement.textContent.trim() : 'Anonymous'; 
-
-
-  //             if (postId) {
-  //               console.log('Liked post with ID:', postId.replace("_",""));
-  //                const postRef = doc(db, 'posts', postId.replace("_",""));
-  //                let post = await getDoc(postRef)
-  //                post = post.data();
-  //               console.log("posts",post);
-  //               sendNotification(post.postObject.fmcToken)
-  //           }
-  //             handleLikeButtonClick(likeType, username); 
-  //         }
-  //     });
-  // });
+  
   document.addEventListener('DOMContentLoaded', function() {
   document.body.addEventListener('click', async function(event) {
     var clickedElement = event.target.closest('.likeButton');

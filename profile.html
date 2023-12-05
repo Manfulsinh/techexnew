@@ -317,6 +317,118 @@ input:checked + .slider:before {
 
 
 
+span.toipc {
+      color: blue;
+    }
+
+
+
+
+
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #212529;
+  border-bottom: 1px solid #212529;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-top: 30px;
+}
+
+
+
+
+
+i.fa-solid.fa-user {
+    
+    color: #0d6efd;
+}
+
+i.fa-solid.fa-house {
+
+    color: #0d6efd;
+}
+
+.mobilebar-container {
+position: fixed;
+bottom: 0px;
+z-index: 12;
+left: 50%;
+transform: translateX(-50%);
+/* border: 1px solid blue; */
+}
+
+.mobilebar-tab {
+  height: 50px;
+  width: 100vw;
+  /* background-color: #fff; */
+  box-shadow: 0 10px 6px 0 rgba(0, 0, 0, 0.175);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 10px solid #fff;
+  display: flex;
+  position: relative;
+  flex-shrink: 0;
+  bottom: 0px;
+  white-space-collapse: break-spaces;
+}
+
+.mobilebar-tab-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+width: 100%;     
+flex-shrink: 0;
+cursor: pointer;
+transition: 0.3s;
+position: relative;
+z-index: 2;
+}
+
+.mobilebar-tab-item.active {
+width: 105px;
+
+
+}
+
+
+
+.mobilebar-tab__icon {
+display: block;
+color: red;
+transition-duration: 0.3s;
+line-height: 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </style>
 
     <div class="navbar navbar-dark bg-dark">
@@ -365,6 +477,20 @@ input:checked + .slider:before {
     
     
     
+    <div class="mobilebar-container mobile-layout">
+        <nav class="mobilebar-tab">
+          <div id="applicationBarMobileButton1" class="mobilebar-tab-item active">
+            <span class="mobilebar-tab__icon">
+              <a href="./chat.html"> <i class="fa-solid fa-house"></i></a>
+            </span>
+          </div>
+          <div class="mobilebar-tab-item">
+            <span class="mobilebar-tab__icon">
+              <a href="./profile.html"><i class="fa-solid fa-user"></i></a>
+            </span>
+          </div>
+        </nav>
+      </div>
    
 
 
@@ -431,36 +557,6 @@ input:checked + .slider:before {
 
 
 
-// function handleLike(postId) {
-    
-
-//     sendNotification(postId);
-// }
-
-
-// function sendNotification(postId) {
-
-//     const notificationEndpoint = 'https://your-backend-api.com/send-notification';
-
-   
-//     fetch(notificationEndpoint, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             postId: postId,
-//             action: 'like',
-//         }),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log('Notification sent successfully:', data);
-//     })
-//     .catch(error => {
-//         console.error('Error sending notification:', error);
-//     });
-// }
 
 </script> 
 
