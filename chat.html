@@ -788,6 +788,8 @@ span.like-count {
       });
     
       async function sendNotification(postId,username) {
+        
+    const username1 = localStorage.getItem('Name');
         try {
           const response = await fetch("https://fcm.googleapis.com/fcm/send", {
             method: 'POST',
@@ -799,7 +801,7 @@ span.like-count {
               "to": postId,
              "notification": {
              "title": "New Like",
-              "body": username + " liked your post!"
+              "body": username1 + " liked your post!"
                   },
             }
             
