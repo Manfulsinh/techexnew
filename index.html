@@ -91,66 +91,29 @@
 
     
         const googleProvider = new GoogleAuthProvider();
-      
-        document.getElementById('glogin').addEventListener('click', (e) => {
-    signInWithPopup(auth, googleProvider)
-        .then((result) => {
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-            const user = result.user;
-            console.log("User Logged in");
 
-            // Check for existing account with different credentials
-            auth.fetchSignInMethodsForEmail(user.email)
-                .then((methods) => {
-                    // If there are multiple sign-in methods, handle accordingly
-                    if (methods.length > 0) {
-                        // Display options to the user
-                        console.log("Multiple sign-in methods available: ", methods);
-                        // You can implement logic to let the user choose which account to link or automatically link them if applicable.
-                    } else {
-                        // No existing account found with different credentials
-                        localStorage.setItem("Name", user.displayName);
-                        localStorage.setItem("emailID", user.email);
-                        localStorage.setItem("photoURL", user.photoURL);
-                        localStorage.setItem("user", user.uid)
-                        window.location.href = 'chat.html';
-                    }
+
+        document.getElementById('glogin').addEventListener('click', (e) => {
+            signInWithPopup(auth, googleProvider)
+                .then((result) => {
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    const user = result.user;
+                    console.log("user", result.user, result)
+                    console.log("User Logged in");
+                    localStorage.setItem("Name", user.displayName);
+                    localStorage.setItem("emailID", user.email);
+                    localStorage.setItem("photoURL", user.photoURL);
+                    localStorage.setItem("user", user.uid)
+                    window.location.href = 'chat.html';
                 })
                 .catch((error) => {
-                    // Handle any errors related to fetchSignInMethodsForEmail
-                    console.error("Error checking sign-in methods: ", error);
+
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
                 });
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert(errorMessage);
         });
-});
-
-
-        // document.getElementById('glogin').addEventListener('click', (e) => {
-        //     signInWithPopup(auth, googleProvider)
-        //         .then((result) => {
-        //             const credential = GoogleAuthProvider.credentialFromResult(result);
-        //             const token = credential.accessToken;
-        //             const user = result.user;
-        //             console.log("user", result.user, result)
-        //             console.log("User Logged in");
-        //             localStorage.setItem("Name", user.displayName);
-        //             localStorage.setItem("emailID", user.email);
-        //             localStorage.setItem("photoURL", user.photoURL);
-        //             localStorage.setItem("user", user.uid)
-        //             window.location.href = 'chat.html';
-        //         })
-        //         .catch((error) => {
-
-        //             const errorCode = error.code;
-        //             const errorMessage = error.message;
-        //             alert(errorMessage);
-        //         });
-        // });
 
 
 
@@ -159,7 +122,7 @@
         signInWithPopup(auth, facebookProvider)
             .then((result) => {
             
-          
+          console.log(result,"result")
                 const fcredential = facebookProvider.credentialFromResult(result);
                     const ftoken = credential.accessToken;
                 const fuser = result.user;
