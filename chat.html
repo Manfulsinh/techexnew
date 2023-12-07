@@ -707,18 +707,46 @@ span.like-count {
             return;
           }
 
-          let dateTime = String(new Date()); 
-          let currentTime=post.postObject.timestamp;
-        
-          currentTime=new Date(currentTime.seconds*1000);
-          
+
+          let dateTime = new Date();
+let currentTime = new Date(post.postObject.timestamp.seconds * 1000); // Post time
+          function timeSince(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  let interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " years ago";
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + " months ago";
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + " days ago";
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + " hours ago";
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes ago";
+  }
+  if (seconds < 60) {
+    return "just now"; 
+  }
+  return Math.floor(seconds) + " seconds ago";
+}
+
+
           const isCreator = auth.currentUser && auth.currentUser.uid === post.postObject.uid;
           card.innerHTML = `
             <div class="card-header">
               <img class="avatar" src="${post.postObject.userprofile}" alt="User Avatar">
               <div class="user-info">
                 <div class="user-name">${post.postObject.username}</div>
-                <div class="timestamp">${currentTime.toLocaleString()}</div>
+                <div class="timestamp">${timeSince(currentTime)}</div>
               </div>
               ${isCreator ? '<i class="fas fa-ellipsis-h nice-icon ml-auto popoverIcon"></i>' : ''} 
             </div>
@@ -870,7 +898,9 @@ span.like-count {
 
 
 
-
+  setInterval(function() {
+    window.location.reload();
+  }, 60000); // 60000 milliseconds = 1 minute
 
   </script>     
 
