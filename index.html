@@ -123,8 +123,8 @@
             .then((result) => {
             
           console.log(result,"result")
-                const fcredential = facebookProvider.credentialFromResult(result);
-                    const ftoken = credential.accessToken;
+                // const fcredential = facebookProvider.credentialFromResult(result);
+                    const ftoken = result.accessToken;
                 const fuser = result.user;
                
                 localStorage.setItem("Name", user.displayName);
