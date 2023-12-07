@@ -127,10 +127,10 @@
                     const ftoken = result.accessToken;
                 const fuser = result.user;
                
-                localStorage.setItem("Name", user.displayName);
-                localStorage.setItem("emailID", user.email);
-                localStorage.setItem("photoURL", user.photoURL);
-                localStorage.setItem("user", user.uid);
+                localStorage.setItem("Name", fuser.displayName);
+                localStorage.setItem("emailID", fuser.email);
+                localStorage.setItem("photoURL", fuser.photoURL);
+                localStorage.setItem("user", fuser.uid);
                 window.location.href = 'chat.html'; 
             })
             .catch((error) => {
